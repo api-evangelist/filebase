@@ -1,0 +1,159 @@
+aid: filebase
+name: Filebase
+description: >-
+  Filebase is an S3-compatible object storage and IPFS pinning platform that
+  combines familiar cloud storage APIs with decentralized, blockchain-backed
+  infrastructure. Developers can store, manage, and pin files to IPFS using
+  standard S3 tooling, a dedicated IPFS Pinning Service API, and an IPFS RPC
+  API — all without changing existing workflows. Filebase delivers geo-redundant
+  3x replication, free egress for object storage, a global CDN, and predictable
+  pricing, making it straightforward to build Web3 applications on top of
+  decentralized networks through a Web2-style developer experience.
+type: Index
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+url: https://raw.githubusercontent.com/api-evangelist/filebase/refs/heads/main/apis.yml
+created: "2026-06-13"
+modified: "2026-06-13"
+specificationVersion: "0.19"
+tags:
+  - Object Storage
+  - IPFS
+  - S3-Compatible
+  - Decentralized Storage
+  - Pinning
+  - Web3
+  - Cloud Storage
+  - Blockchain
+apis:
+  - aid: filebase:filebase-s3-api
+    name: Filebase S3-Compatible API
+    description: >-
+      The Filebase S3-Compatible API provides standard AWS S3 protocol support
+      for bucket and object management. Developers can use any existing S3 SDK,
+      CLI tool, or framework with endpoint s3.filebase.io and region us-east-1.
+      Authentication uses AWS Signature Version 4 (AWS4-HMAC-SHA256) with
+      Filebase access key and secret key pairs. Supported operations include
+      bucket creation and deletion, object upload (including multipart), copy,
+      delete, and listing. Objects stored in IPFS-backed buckets are
+      automatically pinned with 3x geo-redundant replication.
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://filebase.com/docs/
+    baseURL: https://s3.filebase.io
+    tags:
+      - S3
+      - Object Storage
+      - Buckets
+      - IPFS
+    properties:
+      - type: Documentation
+        url: https://filebase.com/docs/
+    contact:
+      - FN: Filebase Support
+        url: https://filebase.com/
+        email: support@filebase.com
+
+  - aid: filebase:filebase-platform-api
+    name: Filebase Platform API
+    description: >-
+      The Filebase Platform API provides account-level operations that complement
+      the S3 API. Using HTTP Basic authentication with base64-encoded access
+      key and secret key pairs as a Bearer token, developers can retrieve total
+      storage usage, 24-hour trailing bandwidth metrics, and per-bucket storage
+      consumption. All endpoints operate under the /v1/ path with v1 remaining
+      supported during any future deprecation window. Rate limit is 500 requests
+      per second per account.
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://filebase.com/docs/platform-api/overview
+    baseURL: https://api.filebase.io
+    tags:
+      - Platform
+      - Usage
+      - Metrics
+      - Account Management
+    properties:
+      - type: Documentation
+        url: https://filebase.com/docs/platform-api/overview
+    contact:
+      - FN: Filebase Support
+        url: https://filebase.com/
+        email: support@filebase.com
+
+  - aid: filebase:filebase-ipfs-pinning-service-api
+    name: Filebase IPFS Pinning Service API
+    description: >-
+      The Filebase IPFS Pinning Service API implements the vendor-neutral IPFS
+      Pinning Service specification. Per-bucket Bearer tokens authenticate
+      requests to list, add, retrieve, replace, and delete pinned objects by
+      CID. Supports metadata tagging and filtering by CID, name, status, and
+      timestamps. Compatible with IPFS Desktop, the IPFS CLI, and any
+      third-party tool supporting the pinning service standard. Rate limit is
+      100 requests per second.
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://filebase.com/docs/ipfs/pinning-service-api
+    baseURL: https://api.filebase.io/v1/ipfs
+    tags:
+      - IPFS
+      - Pinning
+      - Decentralized Storage
+      - CID
+    properties:
+      - type: Documentation
+        url: https://filebase.com/docs/ipfs/pinning-service-api
+    contact:
+      - FN: Filebase Support
+        url: https://filebase.com/
+        email: support@filebase.com
+
+  - aid: filebase:filebase-ipfs-rpc-api
+    name: Filebase IPFS RPC API
+    description: >-
+      The Filebase IPFS RPC API exposes core IPFS daemon functionality through
+      an HTTP interface. Bucket-specific Bearer tokens authenticate all POST
+      requests to the rpc.filebase.io endpoint. Capabilities span data
+      management (add, get, CAR import), pinning (pin/unpin/list), Mutable File
+      System (MFS) operations, keypair management, IPNS publishing and
+      resolution, and daemon information. This API enables fine-grained
+      programmatic control over IPFS operations without running a local node.
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://filebase.com/docs/ipfs/rpc-api
+    baseURL: https://rpc.filebase.io
+    tags:
+      - IPFS
+      - RPC
+      - IPNS
+      - Pinning
+      - MFS
+    properties:
+      - type: Documentation
+        url: https://filebase.com/docs/ipfs/rpc-api
+    contact:
+      - FN: Filebase Support
+        url: https://filebase.com/
+        email: support@filebase.com
+
+common:
+  - type: Website
+    url: https://filebase.com/
+  - type: Documentation
+    url: https://filebase.com/docs/
+  - type: GitHubOrg
+    url: https://github.com/filebase
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/filebase
+  - type: X
+    url: https://twitter.com/Filebase
+  - type: Blog
+    url: https://filebase.com/blog/
+  - type: Pricing
+    url: https://filebase.com/pricing/
+  - type: StatusPage
+    url: https://status.filebase.com/
+  - type: Plans
+    url: plans/filebase-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/filebase-rate-limits.yml
+  - type: FinOps
+    url: finops/filebase-finops.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

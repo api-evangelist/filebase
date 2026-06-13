@@ -1,0 +1,168 @@
+specificationVersion: "1.0"
+framework: FinOps Framework
+alignment: FOCUS
+id: filebase-finops
+name: Filebase FinOps
+description: >-
+  FinOps guidance for managing Filebase cloud spend across S3-compatible object
+  storage, IPFS pinning, IPFS egress, and CDN gateway usage. Filebase's pricing
+  model is predictable: storage is metered per GB-month, object egress is free,
+  IPFS egress is plan-limited with per-GB overage, and operations (Class A / B)
+  are included in plan allowances. The primary cost drivers are IPFS egress
+  overages and additional storage beyond plan-included amounts.
+url: https://filebase.com/pricing/
+provider: Filebase
+currency: USD
+
+costDimensions:
+  - name: Storage
+    description: >-
+      Pooled storage across Object Storage and IPFS buckets, billed per
+      GB-month. Storage is the base cost driver on the Pro plan.
+    unit: GB-month
+    pricing:
+      - tier: Pro Plan Included
+        included: "500 GB"
+        rate: 0.00
+        currency: USD
+      - tier: Pro Plan Overage
+        rate: 0.015
+        unit: GB
+        currency: USD
+        notes: Additional storage beyond plan-included amount.
+      - tier: Free Plan Included
+        included: "5 GB"
+        rate: 0.00
+        currency: USD
+
+  - name: Object Storage Egress
+    description: >-
+      Outbound bandwidth from S3-compatible object storage buckets. Filebase
+      offers free egress on all plans, eliminating the egress cost driver
+      common with AWS S3 and GCP Cloud Storage.
+    unit: GB
+    pricing:
+      - tier: All Plans
+        rate: 0.00
+        currency: USD
+        notes: Free egress is a core Filebase differentiator.
+
+  - name: IPFS Egress
+    description: >-
+      Outbound bandwidth through dedicated IPFS gateways. Each plan includes
+      a monthly IPFS egress allowance; overage is billed per GB.
+    unit: GB
+    pricing:
+      - tier: Free Plan Included
+        included: "1 GB"
+        rate: 0.00
+        currency: USD
+      - tier: Pro Plan Included
+        included: "250 GB"
+        rate: 0.00
+        currency: USD
+      - tier: Pro Plan Overage
+        rate: 0.015
+        unit: GB
+        currency: USD
+        notes: IPFS egress overages are the primary variable cost on Pro.
+
+  - name: Class A Operations
+    description: >-
+      Write and list operations (PUT, POST, LIST). Plan allowances cover
+      typical workloads; high-write patterns should be monitored.
+    unit: operations
+    pricing:
+      - tier: Free Plan Included
+        included: "100,000"
+        rate: 0.00
+        currency: USD
+      - tier: Pro Plan Included
+        included: "1,000,000"
+        rate: 0.00
+        currency: USD
+
+  - name: Class B Operations
+    description: >-
+      Read and head operations (GET, HEAD). Plan allowances are generous;
+      high-read CDN patterns may need Enterprise consideration.
+    unit: operations
+    pricing:
+      - tier: Free Plan Included
+        included: "1,000,000"
+        rate: 0.00
+        currency: USD
+      - tier: Pro Plan Included
+        included: "10,000,000"
+        rate: 0.00
+        currency: USD
+
+costAllocation:
+  - dimension: Bucket
+    description: >-
+      Costs can be tracked per S3 bucket or IPFS bucket. Use the Platform API
+      GET /v1/usage/storage/<bucket> endpoint to retrieve per-bucket storage
+      metrics programmatically for chargeback or showback reporting.
+    apiEndpoint: "GET https://api.filebase.io/v1/usage/storage/{bucket}"
+  - dimension: Account
+    description: >-
+      Aggregate storage and 24-hour trailing bandwidth are available via the
+      Platform API GET /v1/usage endpoint.
+    apiEndpoint: "GET https://api.filebase.io/v1/usage"
+
+optimization:
+  - recommendation: Leverage Free Object Egress
+    impact: High
+    description: >-
+      Filebase charges $0.00 for object storage egress. Migrating read-heavy
+      workloads from AWS S3 or GCP Cloud Storage can eliminate egress costs
+      entirely. Benchmark bandwidth-intensive applications first.
+
+  - recommendation: Monitor IPFS Egress Consumption
+    impact: High
+    description: >-
+      IPFS egress is the primary variable cost. Implement gateway request
+      caching at the CDN or application layer to minimize repeated content
+      delivery from IPFS gateways. Use the Platform API to track usage daily.
+
+  - recommendation: Right-Size Plan to Storage Usage
+    impact: Medium
+    description: >-
+      Pro plan storage overage ($0.015/GB) is the same per-GB rate as the base
+      storage price. Monitor actual storage quarterly and upgrade/downgrade
+      plans accordingly. There is no commitment period penalty for changes.
+
+  - recommendation: Use S3 Multipart Uploads for Large Objects
+    impact: Medium
+    description: >-
+      Multipart uploads improve throughput and reduce failure risk for objects
+      over 100 MB. Retrying individual parts on failure is cheaper than
+      restarting full uploads, conserving Class A operation allowances.
+
+  - recommendation: Pin Only Necessary CIDs
+    impact: Low
+    description: >-
+      Pinned files on IPFS consume storage quota. Audit the IPFS Pinning
+      Service API (GET /v1/ipfs/pins) regularly and delete stale or
+      duplicate pins to reclaim storage.
+
+  - recommendation: Evaluate Enterprise for High-Volume Workloads
+    impact: Medium
+    description: >-
+      At scale, Enterprise volume-based pricing may be lower effective cost per
+      GB than Pro plan overages. Request a quote when monthly spend on Pro
+      consistently exceeds the Pro plan base fee by 3x or more.
+
+budgeting:
+  forecastingNotes: >-
+    Filebase costs are highly predictable because object egress is free and
+    the primary variables are storage and IPFS egress. Use the Platform API
+    to retrieve 24-hour trailing bandwidth and extrapolate to monthly IPFS
+    egress. Storage growth can be modeled linearly from historical per-bucket
+    metrics. No data transfer costs exist for object storage, simplifying
+    TCO modeling versus AWS S3 or Azure Blob Storage.
+  anomalySignals:
+    - Sudden spike in IPFS egress from a single gateway suggesting hotlinking
+    - Rapid increase in Class A operations from misconfigured upload loops
+    - Storage growing beyond expected object lifecycle — check for orphaned
+      multipart uploads or missing lifecycle policies

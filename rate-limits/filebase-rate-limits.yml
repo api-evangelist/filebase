@@ -1,0 +1,84 @@
+specificationVersion: "0.1"
+id: filebase-rate-limits
+name: Filebase API Rate Limits
+description: >-
+  Filebase enforces rate limits per API surface to ensure fair use and
+  platform stability. The S3-Compatible API and Platform API share the same
+  500 requests-per-second limit per account. The IPFS Pinning Service API
+  is separately limited to 100 requests per second. The IPFS RPC API
+  inherits the same token-scoped constraints as the Pinning Service API.
+  Limits apply at the account level, not per bucket or per key.
+url: https://filebase.com/docs/platform-api/overview
+rateLimits:
+  - api: Filebase S3-Compatible API
+    description: >-
+      Bucket and object operations via the S3 protocol at s3.filebase.io.
+      Rate limit matches AWS S3 defaults to preserve compatibility with
+      existing tooling and SDK expectations.
+    limits:
+      - scope: account
+        period: second
+        requests: 500
+        unit: requests/second
+        notes: >-
+          Per-account limit. Individual bucket prefix limits may apply for
+          high-throughput multipart uploads per S3 best practices.
+
+  - api: Filebase Platform API
+    description: >-
+      Account-level usage metrics and management endpoints at api.filebase.io.
+      Limit is shared with the S3 API rate envelope.
+    limits:
+      - scope: account
+        period: second
+        requests: 500
+        unit: requests/second
+        notes: >-
+          Authenticated via HTTP Basic / Bearer token using access key pairs.
+
+  - api: Filebase IPFS Pinning Service API
+    description: >-
+      IPFS pinning operations (list, add, get, replace, delete) at
+      api.filebase.io/v1/ipfs/pins. Lower limit reflects pin queue
+      management overhead.
+    limits:
+      - scope: account
+        period: second
+        requests: 100
+        unit: requests/second
+        notes: >-
+          Authenticated via per-bucket Bearer token. Async pin status
+          polling should be implemented with exponential backoff to stay
+          within this limit.
+
+  - api: Filebase IPFS RPC API
+    description: >-
+      Core IPFS daemon operations at rpc.filebase.io. All endpoints are
+      POST requests authenticated with bucket-specific Bearer tokens.
+    limits:
+      - scope: bucket
+        period: second
+        requests: 100
+        unit: requests/second
+        notes: >-
+          Tokens are bucket-scoped; limits apply per token/bucket combination.
+          Heavy add/get operations may be subject to additional throughput
+          constraints based on object size.
+
+headers:
+  description: >-
+    Filebase follows standard HTTP conventions for communicating rate limit
+    state. Clients should handle 429 Too Many Requests responses with
+    exponential backoff and respect Retry-After headers when present.
+  statusCodes:
+    - code: 429
+      meaning: Too Many Requests — rate limit exceeded; retry after backoff
+    - code: 503
+      meaning: Service temporarily unavailable — check status.filebase.com
+
+bestPractices:
+  - Implement exponential backoff with jitter on 429 and 503 responses.
+  - Use multipart uploads for large objects to parallelize within limits.
+  - Cache IPNS resolution results locally to avoid repeated RPC calls.
+  - Poll pin status with increasing intervals (start at 5s, cap at 60s).
+  - Use per-bucket tokens for IPFS APIs to isolate rate limit consumption.

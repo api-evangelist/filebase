@@ -1,0 +1,160 @@
+specificationVersion: "0.1"
+id: filebase-plans-pricing
+name: Filebase Plans and Pricing
+description: >-
+  Filebase offers tiered pricing for S3-compatible object storage and IPFS
+  pinning, with a free tier for getting started and paid plans scaling to
+  enterprise workloads. Storage and bandwidth are pooled across Object Storage
+  and IPFS. Object storage egress is free; IPFS egress is plan-limited with
+  per-GB overage pricing. All paid plans include unlimited pinned files,
+  dedicated gateways, custom domains, and priority support.
+url: https://filebase.com/pricing/
+plans:
+  - name: Free
+    description: >-
+      Entry-level plan for individual developers evaluating Filebase. No credit
+      card required. Covers basic object storage and IPFS pinning up to 500
+      pinned files with 1 GB of IPFS egress.
+    url: https://filebase.com/pricing/
+    price: 0.00
+    currency: USD
+    billingCycle: monthly
+    features:
+      - name: Storage
+        description: 5 GB pooled across Object Storage or IPFS
+        value: "5 GB"
+      - name: Object Egress
+        description: Outbound bandwidth from object storage buckets
+        value: Free
+      - name: Class A Operations
+        description: Write and list operations included
+        value: "100,000"
+      - name: Class B Operations
+        description: Read and head operations included
+        value: "1,000,000"
+      - name: Pinned Files
+        description: Maximum IPFS pinned files
+        value: "500"
+      - name: IPFS Egress
+        description: Outbound IPFS gateway bandwidth
+        value: "1 GB"
+      - name: IPNS Names
+        description: Mutable IPNS name records
+        value: "1"
+      - name: Sites and CDN
+        description: Hosted static sites with CDN
+        value: "1"
+      - name: Gateway and CDN
+        description: Dedicated IPFS gateways with CDN
+        value: "1"
+      - name: Image Transformations
+        description: On-the-fly image resizing and optimization
+        value: Limited
+      - name: Threat Monitoring
+        description: Security monitoring for stored content
+        value: Basic
+
+  - name: Pro
+    description: >-
+      Production plan for developers and teams building S3 or IPFS applications
+      at scale. Includes unlimited pinned files, 500 GB pooled storage,
+      dedicated IPFS gateways with custom domain support, and priority support.
+    url: https://filebase.com/pricing/
+    price: 7.50
+    currency: USD
+    billingCycle: monthly
+    features:
+      - name: Storage
+        description: Pooled storage across Object Storage or IPFS
+        value: "500 GB"
+      - name: Additional Storage
+        description: Per-GB overage pricing beyond included storage
+        value: "$0.015/GB"
+      - name: Object Egress
+        description: Outbound bandwidth from object storage buckets
+        value: Free
+      - name: Class A Operations
+        description: Write and list operations included
+        value: "1,000,000"
+      - name: Class B Operations
+        description: Read and head operations included
+        value: "10,000,000"
+      - name: Pinned Files
+        description: Maximum IPFS pinned files
+        value: Unlimited
+      - name: Bucket Count
+        description: Maximum number of buckets
+        value: "100"
+      - name: IPFS Egress
+        description: Outbound IPFS gateway bandwidth included
+        value: "250 GB"
+      - name: Additional IPFS Bandwidth
+        description: Per-GB pricing for IPFS egress beyond included amount
+        value: "$0.015/GB"
+      - name: IPNS Names
+        description: Mutable IPNS name records
+        value: "10"
+      - name: Sites and CDN
+        description: Hosted static sites with CDN
+        value: "3"
+      - name: Custom Domains
+        description: Custom domain support for gateways and sites
+        value: Supported
+      - name: Image Transformations
+        description: On-the-fly image resizing and optimization
+        value: Unlimited
+      - name: API Requests
+        description: Platform API request allowance
+        value: Unlimited
+      - name: Threat Monitoring
+        description: Security monitoring for stored content
+        value: Standard
+      - name: Priority Support
+        description: Elevated support response times
+        value: Included
+
+  - name: Enterprise
+    description: >-
+      Custom high-volume plan for organizations requiring large-scale IPFS
+      deployments, reseller capabilities, data migration support, dedicated
+      account management, and SLA guarantees. Contact Filebase for custom
+      pricing.
+    url: https://filebase.com/pricing/
+    price: 0.00
+    currency: USD
+    billingCycle: custom
+    contact: true
+    features:
+      - name: Storage
+        description: Volume-based storage pricing
+        value: Custom
+      - name: Pinned Files
+        description: Maximum IPFS pinned files
+        value: Unlimited
+      - name: Bucket Count
+        description: Maximum number of buckets
+        value: Higher limits
+      - name: IPNS Names
+        description: Mutable IPNS name records
+        value: Expanded limits
+      - name: Gateway Fleet
+        description: Higher-capacity IPFS gateway fleet with CDN integration
+        value: Enterprise
+      - name: Threat Monitoring
+        description: Security monitoring for stored content
+        value: Advanced
+      - name: Uptime SLA
+        description: Contractual uptime service-level agreement
+        value: Included
+      - name: Slack Connect
+        description: Direct Slack channel with Filebase team
+        value: Included
+      - name: Migration Assistance
+        description: Concierge-led data migration support
+        value: Included
+      - name: Reseller Capabilities
+        description: White-label and reseller program access
+        value: Included
+      - name: Dedicated Support
+        description: Named account manager and dedicated support
+        value: Included
