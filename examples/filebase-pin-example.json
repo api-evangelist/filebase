@@ -1,0 +1,12 @@
+{
+  "cid": "QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco",
+  "name": "my-nft-metadata.json",
+  "origins": [
+    "/ip4/203.0.113.5/tcp/4001/p2p/QmPeerIdExampleABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  ],
+  "meta": {
+    "app": "my-nft-marketplace",
+    "environment": "production",
+    "token_id": "1234"
+  }
+}

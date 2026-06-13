@@ -1,0 +1,682 @@
+openapi: 3.0.3
+info:
+  title: Filebase IPFS RPC API
+  description: >-
+    The Filebase IPFS RPC API exposes core IPFS daemon functionality through
+    an HTTP interface. Bucket-specific Bearer tokens authenticate all POST
+    requests. Capabilities span data management (add, get, CAR import), pinning
+    (pin/unpin/list), Mutable File System (MFS) operations, keypair management,
+    IPNS publishing and resolution, and daemon information. Enables fine-grained
+    programmatic control over IPFS operations without running a local node.
+  version: "1.0"
+  contact:
+    name: Filebase Support
+    url: https://filebase.com/
+    email: support@filebase.com
+  termsOfService: https://filebase.com/terms/
+  license:
+    name: Proprietary
+    url: https://filebase.com/terms/
+externalDocs:
+  description: Filebase IPFS RPC API Documentation
+  url: https://filebase.com/docs/ipfs/rpc-api
+servers:
+  - url: https://rpc.filebase.io
+    description: Filebase IPFS RPC API
+security:
+  - BearerAuth: []
+paths:
+  /api/v0/add:
+    post:
+      operationId: addData
+      summary: Add data to IPFS
+      description: >-
+        Add a file or directory to IPFS. Returns the CID of the pinned content.
+      tags:
+        - Data Management
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: File content to add to IPFS
+      parameters:
+        - name: pin
+          in: query
+          description: Pin this object when adding
+          schema:
+            type: boolean
+            default: true
+        - name: wrap-with-directory
+          in: query
+          description: Wrap files with a directory object
+          schema:
+            type: boolean
+            default: false
+      responses:
+        "200":
+          description: Successfully added to IPFS
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/v0/cat:
+    post:
+      operationId: getData
+      summary: Get data from IPFS
+      description: >-
+        Retrieve and output the content of a file identified by its CID.
+      tags:
+        - Data Management
+      parameters:
+        - name: arg
+          in: query
+          required: true
+          description: The IPFS CID or path to retrieve
+          schema:
+            type: string
+      responses:
+        "200":
+          description: File content
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/v0/dag/import:
+    post:
+      operationId: importCar
+      summary: Import a CAR file
+      description: >-
+        Import a CAR (Content Addressable aRchive) file into IPFS.
+      tags:
+        - Data Management
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: CAR file to import
+      responses:
+        "200":
+          description: CAR import result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CarImportResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/v0/pin/add:
+    post:
+      operationId: pinAdd
+      summary: Pin an object
+      description: >-
+        Pin objects to local storage by CID.
+      tags:
+        - Pinning
+      parameters:
+        - name: arg
+          in: query
+          required: true
+          description: Path to object(s) to be pinned
+          schema:
+            type: string
+        - name: recursive
+          in: query
+          description: Recursively pin the object linked to by the specified object(s)
+          schema:
+            type: boolean
+            default: true
+      responses:
+        "200":
+          description: Pinned successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PinAddResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/v0/pin/rm:
+    post:
+      operationId: pinRemove
+      summary: Remove pinned objects
+      description: >-
+        Remove pinned objects from local storage.
+      tags:
+        - Pinning
+      parameters:
+        - name: arg
+          in: query
+          required: true
+          description: Path to object(s) to be unpinned
+          schema:
+            type: string
+        - name: recursive
+          in: query
+          description: Recursively unpin the object linked to by the specified object(s)
+          schema:
+            type: boolean
+            default: true
+      responses:
+        "200":
+          description: Unpinned successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PinRmResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/v0/pin/ls:
+    post:
+      operationId: pinList
+      summary: List pinned objects
+      description: >-
+        List objects pinned to local storage.
+      tags:
+        - Pinning
+      parameters:
+        - name: arg
+          in: query
+          description: Path to object(s) to be listed
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: The type of pinned keys to list
+          schema:
+            type: string
+            enum: [direct, indirect, recursive, all]
+            default: all
+        - name: quiet
+          in: query
+          description: Write just hashes of objects
+          schema:
+            type: boolean
+            default: false
+      responses:
+        "200":
+          description: List of pinned objects
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PinLsResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/v0/files/ls:
+    post:
+      operationId: mfsList
+      summary: List MFS directory contents
+      description: >-
+        List files and directories in the Mutable File System (MFS).
+      tags:
+        - MFS
+      parameters:
+        - name: arg
+          in: query
+          description: Path to show listing for (default /)
+          schema:
+            type: string
+            default: "/"
+        - name: long
+          in: query
+          description: Use long listing format
+          schema:
+            type: boolean
+            default: false
+      responses:
+        "200":
+          description: Directory listing
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MfsLsResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/v0/files/mkdir:
+    post:
+      operationId: mfsMkdir
+      summary: Create MFS directory
+      description: >-
+        Make a directory in the Mutable File System (MFS).
+      tags:
+        - MFS
+      parameters:
+        - name: arg
+          in: query
+          required: true
+          description: Path to directory to make
+          schema:
+            type: string
+        - name: parents
+          in: query
+          description: Create parent directories as needed
+          schema:
+            type: boolean
+            default: false
+      responses:
+        "200":
+          description: Directory created
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/v0/files/write:
+    post:
+      operationId: mfsWrite
+      summary: Write to MFS file
+      description: >-
+        Write to a mutable file in MFS.
+      tags:
+        - MFS
+      parameters:
+        - name: arg
+          in: query
+          required: true
+          description: Path to write to
+          schema:
+            type: string
+        - name: create
+          in: query
+          description: Create the file if it does not exist
+          schema:
+            type: boolean
+            default: false
+        - name: truncate
+          in: query
+          description: Truncate the file to size zero before writing
+          schema:
+            type: boolean
+            default: false
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: File written successfully
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/v0/files/rm:
+    post:
+      operationId: mfsRemove
+      summary: Remove MFS file or directory
+      description: >-
+        Remove a file or directory from MFS.
+      tags:
+        - MFS
+      parameters:
+        - name: arg
+          in: query
+          required: true
+          description: File to remove
+          schema:
+            type: string
+        - name: recursive
+          in: query
+          description: Recursively remove directories
+          schema:
+            type: boolean
+            default: false
+      responses:
+        "200":
+          description: File removed successfully
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/v0/key/gen:
+    post:
+      operationId: keyGen
+      summary: Create a new keypair
+      description: >-
+        Create a new keypair for use with IPNS.
+      tags:
+        - Keypairs
+      parameters:
+        - name: arg
+          in: query
+          required: true
+          description: Name of the key to create
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: Type of the key to create
+          schema:
+            type: string
+            enum: [rsa, ed25519]
+            default: ed25519
+        - name: size
+          in: query
+          description: Size of the key to generate (only for RSA)
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Key created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KeyResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/v0/key/list:
+    post:
+      operationId: keyList
+      summary: List all local keypairs
+      description: >-
+        List all keypairs available for IPNS.
+      tags:
+        - Keypairs
+      responses:
+        "200":
+          description: List of keypairs
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KeyListResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/v0/name/publish:
+    post:
+      operationId: namePublish
+      summary: Publish IPNS name
+      description: >-
+        Publish an IPFS path to IPNS.
+      tags:
+        - IPNS
+      parameters:
+        - name: arg
+          in: query
+          required: true
+          description: IPFS path of the object to be published
+          schema:
+            type: string
+        - name: key
+          in: query
+          description: Name of the key to be used (default self)
+          schema:
+            type: string
+            default: self
+        - name: lifetime
+          in: query
+          description: Time duration that the record will be valid for (e.g. 24h)
+          schema:
+            type: string
+            default: "24h"
+        - name: ttl
+          in: query
+          description: Time duration this record should be cached for
+          schema:
+            type: string
+      responses:
+        "200":
+          description: IPNS name published
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NamePublishResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/v0/name/resolve:
+    post:
+      operationId: nameResolve
+      summary: Resolve IPNS name
+      description: >-
+        Resolve IPNS names.
+      tags:
+        - IPNS
+      parameters:
+        - name: arg
+          in: query
+          description: The IPNS name to resolve. Defaults to your node's peerID
+          schema:
+            type: string
+        - name: recursive
+          in: query
+          description: Resolve until the result is not an IPNS name
+          schema:
+            type: boolean
+            default: true
+        - name: nocache
+          in: query
+          description: Do not use cached entries
+          schema:
+            type: boolean
+            default: false
+      responses:
+        "200":
+          description: Resolved IPNS name
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NameResolveResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/v0/id:
+    post:
+      operationId: nodeId
+      summary: Show IPFS node identity
+      description: >-
+        Show IPFS node id info.
+      tags:
+        - Node
+      responses:
+        "200":
+          description: Node identity information
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NodeIdResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Bucket-specific Bearer token for authentication
+  schemas:
+    AddResponse:
+      type: object
+      properties:
+        Name:
+          type: string
+          description: Filename
+        Hash:
+          type: string
+          description: CID of the added content
+        Size:
+          type: string
+          description: Size of the content in bytes
+    CarImportResponse:
+      type: object
+      properties:
+        Root:
+          type: object
+          properties:
+            Cid:
+              type: object
+              properties:
+                "/":
+                  type: string
+            PinErrorMsg:
+              type: string
+    PinAddResponse:
+      type: object
+      properties:
+        Pins:
+          type: array
+          items:
+            type: string
+          description: List of pinned CIDs
+    PinRmResponse:
+      type: object
+      properties:
+        Pins:
+          type: array
+          items:
+            type: string
+          description: List of unpinned CIDs
+    PinLsResponse:
+      type: object
+      properties:
+        Keys:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              Type:
+                type: string
+                enum: [direct, indirect, recursive]
+    MfsLsResponse:
+      type: object
+      properties:
+        Entries:
+          type: array
+          items:
+            type: object
+            properties:
+              Name:
+                type: string
+              Type:
+                type: integer
+              Size:
+                type: integer
+                format: int64
+              Hash:
+                type: string
+    KeyResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Key ID (PeerID format)
+        Name:
+          type: string
+          description: Key name
+    KeyListResponse:
+      type: object
+      properties:
+        Keys:
+          type: array
+          items:
+            $ref: "#/components/schemas/KeyResponse"
+    NamePublishResponse:
+      type: object
+      properties:
+        Name:
+          type: string
+          description: IPNS name
+        Value:
+          type: string
+          description: Resolved IPFS path
+    NameResolveResponse:
+      type: object
+      properties:
+        Path:
+          type: string
+          description: Resolved IPFS path
+    NodeIdResponse:
+      type: object
+      properties:
+        ID:
+          type: string
+          description: PeerID of the node
+        PublicKey:
+          type: string
+          description: Public key of the node
+        Addresses:
+          type: array
+          items:
+            type: string
+          description: Addresses the node is listening on
+        AgentVersion:
+          type: string
+          description: IPFS version string
+        ProtocolVersion:
+          type: string
+    Error:
+      type: object
+      properties:
+        Message:
+          type: string
+          description: Error message
+        Code:
+          type: integer
+          description: Error code
+        Type:
+          type: string
+          description: Error type
+  responses:
+    Unauthorized:
+      description: Unauthorized; Bearer token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+tags:
+  - name: Data Management
+    description: Add, retrieve, and import IPFS data
+  - name: Pinning
+    description: Pin and unpin IPFS objects
+  - name: MFS
+    description: Mutable File System operations
+  - name: Keypairs
+    description: IPNS keypair management
+  - name: IPNS
+    description: IPNS name publishing and resolution
+  - name: Node
+    description: IPFS node information

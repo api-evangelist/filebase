@@ -1,0 +1,181 @@
+vocabulary:
+  provider: Filebase
+  version: "1.0"
+  created: "2026-06-13"
+  description: >-
+    Domain vocabulary for Filebase S3-compatible object storage and IPFS pinning
+    platform covering object storage, IPFS, decentralized storage, and Web3 concepts.
+  terms:
+    - term: bucket
+      definition: >-
+        A named container for storing objects in Filebase's S3-compatible storage.
+        Bucket names must be globally unique. Buckets can be configured as standard
+        object storage or IPFS-backed (decentralized) storage.
+      category: Object Storage
+      relatedTerms: [object, ipfs-bucket]
+
+    - term: object
+      definition: >-
+        A file stored in a Filebase bucket, consisting of data, metadata, and a
+        unique key. For IPFS-backed buckets, each object is automatically pinned
+        to IPFS and assigned a Content Identifier (CID).
+      category: Object Storage
+      relatedTerms: [bucket, key, cid, etag]
+
+    - term: key
+      definition: >-
+        The unique identifier (file path) for an object within a bucket.
+        Functions as the file name and path in the S3-compatible namespace.
+      category: Object Storage
+      relatedTerms: [object, bucket]
+
+    - term: cid
+      definition: >-
+        Content Identifier — a self-describing, hash-based identifier for
+        content stored on IPFS. CIDs are deterministic: the same content always
+        produces the same CID. Returned in the x-amz-meta-cid header when
+        uploading objects to IPFS-backed buckets.
+      category: IPFS
+      relatedTerms: [ipfs, pin, ipns]
+
+    - term: pin
+      definition: >-
+        The act of instructing an IPFS node to retain and serve specific content
+        identified by its CID. Filebase provides 3x geo-redundant replication for
+        all pinned content. Without pinning, IPFS nodes may garbage-collect content.
+      category: IPFS
+      relatedTerms: [cid, pinning-service, unpin]
+
+    - term: ipfs
+      definition: >-
+        InterPlanetary File System — a peer-to-peer distributed file system
+        protocol for content-addressed storage. Content is addressed by CID rather
+        than by location. Filebase supports IPFS through its pinning service,
+        RPC API, and IPFS-backed S3 buckets.
+      category: IPFS
+      relatedTerms: [cid, pin, ipns, mfs]
+
+    - term: ipns
+      definition: >-
+        InterPlanetary Name System — a mutable naming layer for IPFS that allows
+        a persistent name to point to changing IPFS content. IPNS names are
+        derived from public keys and can be updated by publishing new records.
+        Filebase Sites uses IPNS to enable updatable decentralized websites.
+      category: IPFS
+      relatedTerms: [ipfs, cid, key-pair]
+
+    - term: mfs
+      definition: >-
+        Mutable File System — a virtual filesystem interface on top of IPFS that
+        allows files and directories to be organized and modified with familiar
+        filesystem semantics (mkdir, write, rm, ls). Exposed via the Filebase
+        IPFS RPC API.
+      category: IPFS
+      relatedTerms: [ipfs, rpc-api]
+
+    - term: car
+      definition: >-
+        Content Addressable aRchive — a binary format for bundling multiple
+        IPFS/IPLD objects into a single archive file. CAR files can be imported
+        into IPFS via the Filebase IPFS RPC API's DAG import endpoint.
+      category: IPFS
+      relatedTerms: [ipfs, cid, dag]
+
+    - term: dag
+      definition: >-
+        Directed Acyclic Graph — the underlying data structure used by IPFS for
+        organizing linked content blocks. Each block is content-addressed by CID.
+      category: IPFS
+      relatedTerms: [cid, car, ipfs]
+
+    - term: pinning-service
+      definition: >-
+        A service that accepts CIDs and commits to keeping the associated IPFS
+        content available and retrievable. Filebase implements the vendor-neutral
+        IPFS Pinning Service API specification for interoperability with IPFS
+        Desktop, CLI tools, and third-party integrations.
+      category: IPFS
+      relatedTerms: [pin, cid, ipfs]
+
+    - term: access-key
+      definition: >-
+        A credential identifier used for authenticating with Filebase APIs.
+        For the S3-compatible API, used with AWS Signature Version 4.
+        For the Platform API and IPFS Pinning Service API, encoded with the
+        secret key as a base64 Bearer token.
+      category: Authentication
+      relatedTerms: [secret-key, bearer-token, aws-sig-v4]
+
+    - term: secret-key
+      definition: >-
+        A secret credential paired with an access key for authenticating with
+        Filebase APIs. Must be kept confidential. Combined with the access key
+        for Bearer token generation or AWS Signature Version 4 signing.
+      category: Authentication
+      relatedTerms: [access-key, bearer-token, aws-sig-v4]
+
+    - term: aws-sig-v4
+      definition: >-
+        AWS Signature Version 4 (AWS4-HMAC-SHA256) — the authentication scheme
+        used by the Filebase S3-compatible API. Standard S3 SDKs and CLIs can
+        authenticate using Filebase access key and secret key with endpoint
+        s3.filebase.io and region us-east-1.
+      category: Authentication
+      relatedTerms: [access-key, secret-key, s3-compatible]
+
+    - term: bearer-token
+      definition: >-
+        An OAuth-style authentication token passed in the Authorization header
+        as "Bearer <token>". Filebase uses per-bucket Bearer tokens for the IPFS
+        Pinning Service API and IPFS RPC API, and base64-encoded access/secret
+        key pairs for the Platform API.
+      category: Authentication
+      relatedTerms: [access-key, secret-key, pinning-service]
+
+    - term: s3-compatible
+      definition: >-
+        Describes storage APIs that implement the AWS S3 protocol, enabling
+        use of existing S3 SDKs, CLI tools, and frameworks without modification.
+        Filebase uses s3.filebase.io as the endpoint with region us-east-1.
+      category: Object Storage
+      relatedTerms: [aws-sig-v4, bucket, object]
+
+    - term: geo-redundant-replication
+      definition: >-
+        Filebase stores every object with 3x geographic redundancy across
+        multiple locations, ensuring durability and availability without
+        additional configuration.
+      category: Storage
+      relatedTerms: [object, bucket, ipfs]
+
+    - term: multipart-upload
+      definition: >-
+        An S3-compatible mechanism for uploading large files in smaller parts,
+        improving reliability and enabling parallel uploads. Filebase supports
+        multipart upload via the standard S3 multipart API.
+      category: Object Storage
+      relatedTerms: [object, bucket, s3-compatible]
+
+    - term: egress
+      definition: >-
+        Data transfer out of Filebase storage. Filebase offers free egress for
+        object storage, eliminating transfer cost penalties common with hyperscaler
+        providers.
+      category: Pricing
+      relatedTerms: [bandwidth, object]
+
+    - term: etag
+      definition: >-
+        Entity tag — an HTTP header representing a specific version of a resource.
+        For S3-compatible APIs, typically the MD5 hash of the object content.
+        Returned by Filebase on object upload and retrieval.
+      category: Object Storage
+      relatedTerms: [object, put-object]
+
+    - term: request-id
+      definition: >-
+        A unique identifier assigned to each IPFS pin request in the Filebase
+        IPFS Pinning Service API. Used to retrieve, replace, or delete specific
+        pin requests.
+      category: IPFS
+      relatedTerms: [pin, pinning-service, cid]

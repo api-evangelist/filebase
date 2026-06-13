@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/filebase/main/json-schema/filebase-usage-schema.json",
+  "title": "Filebase Usage Metrics",
+  "description": "Account-level storage and bandwidth usage metrics from the Filebase Platform API",
+  "type": "object",
+  "properties": {
+    "storage": {
+      "type": "object",
+      "description": "Storage consumption metrics",
+      "properties": {
+        "storage_bytes": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Total storage used across all buckets in bytes",
+          "minimum": 0
+        },
+        "object_count": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Total number of stored objects",
+          "minimum": 0
+        },
+        "bucket_count": {
+          "type": "integer",
+          "description": "Total number of buckets",
+          "minimum": 0
+        }
+      }
+    },
+    "bandwidth": {
+      "type": "object",
+      "description": "Bandwidth metrics for the trailing 24-hour period",
+      "properties": {
+        "bandwidth_bytes": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Bandwidth consumed in the trailing 24 hours in bytes",
+          "minimum": 0
+        },
+        "period_start": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Start of the 24-hour measurement period"
+        },
+        "period_end": {
+          "type": "string",
+          "format": "date-time",
+          "description": "End of the 24-hour measurement period"
+        }
+      }
+    }
+  }
+}

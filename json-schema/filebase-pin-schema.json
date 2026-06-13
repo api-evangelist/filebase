@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/filebase/main/json-schema/filebase-pin-schema.json",
+  "title": "Filebase Pin",
+  "description": "An IPFS pin object for the Filebase IPFS Pinning Service API",
+  "type": "object",
+  "required": ["cid"],
+  "properties": {
+    "cid": {
+      "type": "string",
+      "description": "Content Identifier (CID) to be pinned recursively",
+      "examples": ["QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco"]
+    },
+    "name": {
+      "type": "string",
+      "description": "Optional human-readable name for the pinned content",
+      "maxLength": 255,
+      "examples": ["my-nft-metadata.json"]
+    },
+    "origins": {
+      "type": "array",
+      "description": "Optional list of multiaddrs known to provide the data for faster pinning",
+      "items": {
+        "type": "string",
+        "description": "A multiaddr string"
+      },
+      "uniqueItems": true,
+      "maxItems": 20,
+      "examples": [["/ip4/203.0.113.5/tcp/4001/p2p/QmPeer..."]]
+    },
+    "meta": {
+      "type": "object",
+      "description": "Optional key-value metadata for the pin object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "maxProperties": 1000,
+      "examples": [{"app": "my-dapp", "environment": "production"}]
+    }
+  },
+  "additionalProperties": false
+}

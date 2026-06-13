@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/filebase/main/json-schema/filebase-pin-status-schema.json",
+  "title": "Filebase Pin Status",
+  "description": "The status of a pin request in the Filebase IPFS Pinning Service API",
+  "type": "object",
+  "required": ["requestid", "status", "created", "pin", "delegates"],
+  "properties": {
+    "requestid": {
+      "type": "string",
+      "description": "Globally unique identifier of the pin request",
+      "examples": ["UniqueIdOfPinRequest"]
+    },
+    "status": {
+      "type": "string",
+      "description": "Current status of the pin",
+      "enum": ["queued", "pinning", "pinned", "failed"]
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Immutable timestamp when the pin request entered the pinning queue",
+      "examples": ["2026-06-13T00:00:00Z"]
+    },
+    "pin": {
+      "$ref": "filebase-pin-schema.json"
+    },
+    "delegates": {
+      "type": "array",
+      "description": "List of multiaddrs designated by Filebase for p2p connection",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "minItems": 1,
+      "maxItems": 20
+    },
+    "info": {
+      "type": "object",
+      "description": "Optional additional info about the pin status",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "maxProperties": 1000
+    }
+  }
+}

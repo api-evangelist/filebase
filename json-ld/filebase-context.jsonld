@@ -1,0 +1,161 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "filebase": "https://filebase.com/vocab#",
+    "ipfs": "https://ipfs.tech/vocab#",
+
+    "Filebase": "filebase:Filebase",
+    "FilebaseS3API": "filebase:FilebaseS3API",
+    "FilebasePlatformAPI": "filebase:FilebasePlatformAPI",
+    "FilebaseIPFSPinningServiceAPI": "filebase:FilebaseIPFSPinningServiceAPI",
+    "FilebaseIPFSRpcAPI": "filebase:FilebaseIPFSRpcAPI",
+
+    "Bucket": "filebase:Bucket",
+    "Object": "filebase:Object",
+    "Pin": "filebase:Pin",
+    "PinStatus": "filebase:PinStatus",
+    "PinRequest": "filebase:PinRequest",
+    "KeyPair": "filebase:KeyPair",
+    "IPNSName": "filebase:IPNSName",
+    "MFSEntry": "filebase:MFSEntry",
+    "UsageMetrics": "filebase:UsageMetrics",
+    "BandwidthMetrics": "filebase:BandwidthMetrics",
+
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    },
+    "url": {
+      "@id": "schema:url",
+      "@type": "@id"
+    },
+    "created": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:dateTime"
+    },
+    "modified": {
+      "@id": "schema:dateModified",
+      "@type": "xsd:dateTime"
+    },
+
+    "bucketName": {
+      "@id": "filebase:bucketName",
+      "@type": "xsd:string"
+    },
+    "objectKey": {
+      "@id": "filebase:objectKey",
+      "@type": "xsd:string"
+    },
+    "etag": {
+      "@id": "filebase:etag",
+      "@type": "xsd:string"
+    },
+    "region": {
+      "@id": "filebase:region",
+      "@type": "xsd:string"
+    },
+    "storageBytes": {
+      "@id": "filebase:storageBytes",
+      "@type": "xsd:long"
+    },
+    "objectCount": {
+      "@id": "filebase:objectCount",
+      "@type": "xsd:long"
+    },
+    "bandwidthBytes": {
+      "@id": "filebase:bandwidthBytes",
+      "@type": "xsd:long"
+    },
+
+    "cid": {
+      "@id": "ipfs:cid",
+      "@type": "xsd:string"
+    },
+    "status": {
+      "@id": "ipfs:status",
+      "@type": "xsd:string"
+    },
+    "requestId": {
+      "@id": "ipfs:requestId",
+      "@type": "xsd:string"
+    },
+    "delegates": {
+      "@id": "ipfs:delegates",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "origins": {
+      "@id": "ipfs:origins",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "meta": {
+      "@id": "ipfs:meta"
+    },
+    "ipnsName": {
+      "@id": "ipfs:ipnsName",
+      "@type": "xsd:string"
+    },
+    "keyId": {
+      "@id": "ipfs:keyId",
+      "@type": "xsd:string"
+    },
+    "keyType": {
+      "@id": "ipfs:keyType",
+      "@type": "xsd:string"
+    },
+
+    "accessKey": {
+      "@id": "filebase:accessKey",
+      "@type": "xsd:string"
+    },
+    "baseURL": {
+      "@id": "schema:url",
+      "@type": "@id"
+    },
+    "rateLimit": {
+      "@id": "filebase:rateLimit",
+      "@type": "xsd:integer"
+    },
+    "replicationFactor": {
+      "@id": "filebase:replicationFactor",
+      "@type": "xsd:integer"
+    },
+
+    "contact": {
+      "@id": "schema:contactPoint",
+      "@type": "@id"
+    },
+    "email": {
+      "@id": "schema:email",
+      "@type": "xsd:string"
+    },
+    "documentation": {
+      "@id": "schema:documentation",
+      "@type": "@id"
+    },
+
+    "provider": {
+      "@id": "schema:provider",
+      "@type": "@id"
+    },
+    "api": {
+      "@id": "schema:hasPart",
+      "@type": "@id"
+    },
+    "pricing": {
+      "@id": "schema:priceSpecification",
+      "@type": "@id"
+    },
+    "tags": {
+      "@id": "schema:keywords",
+      "@container": "@set"
+    }
+  }
+}
