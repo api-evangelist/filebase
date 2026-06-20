@@ -10,7 +10,7 @@ description: >-
   pricing, making it straightforward to build Web3 applications on top of
   decentralized networks through a Web2-style developer experience.
 type: Index
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 url: https://raw.githubusercontent.com/api-evangelist/filebase/refs/heads/main/apis.yml
 created: "2026-06-13"
 modified: "2026-06-13"
@@ -36,7 +36,7 @@ apis:
       bucket creation and deletion, object upload (including multipart), copy,
       delete, and listing. Objects stored in IPFS-backed buckets are
       automatically pinned with 3x geo-redundant replication.
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://filebase.com/docs/
     baseURL: https://s3.filebase.io
     tags:
@@ -62,7 +62,7 @@ apis:
       consumption. All endpoints operate under the /v1/ path with v1 remaining
       supported during any future deprecation window. Rate limit is 500 requests
       per second per account.
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://filebase.com/docs/platform-api/overview
     baseURL: https://api.filebase.io
     tags:
@@ -88,7 +88,7 @@ apis:
       timestamps. Compatible with IPFS Desktop, the IPFS CLI, and any
       third-party tool supporting the pinning service standard. Rate limit is
       100 requests per second.
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://filebase.com/docs/ipfs/pinning-service-api
     baseURL: https://api.filebase.io/v1/ipfs
     tags:
@@ -114,7 +114,7 @@ apis:
       System (MFS) operations, keypair management, IPNS publishing and
       resolution, and daemon information. This API enables fine-grained
       programmatic control over IPFS operations without running a local node.
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://filebase.com/docs/ipfs/rpc-api
     baseURL: https://rpc.filebase.io
     tags:
