@@ -1,166 +1,13 @@
 {
-  "title": "Filebase Blog",
-  "url": "https://filebase.com/blog/",
-  "feed": "https://filebase.com/blog/rss/",
-  "fetched": "2026-06-14T20:42:17Z",
-  "posts": [
-    {
-      "title": "Best Object Storage Providers in 2026: Vendors, Options, and Pricing",
-      "url": "https://filebase.com/blog/best-object-storage-providers-in-2026-vendors-options-and-pricing/",
-      "description": "Compare the best object storage providers for active apps, backups, and modern file-heavy workloads in 2026.",
-      "published": "Thu, 11 Jun 2026 18:21:51 GMT",
-      "author": "The Filebase Team",
-      "categories": [
-        "Object Storage",
-        "Object Storage Providers"
-      ]
-    },
-    {
-      "title": "Introducing Filebase Object Storage with Free Egress",
-      "url": "https://filebase.com/blog/introducing-filebase-object-storage-with-free-egress/",
-      "description": "Introducing Filebase Object Storage: S3-compatible, $15/TB per month, free egress, built-in CDN, and up to 18x faster than Cloudflare R2.",
-      "published": "Wed, 20 May 2026 13:00:27 GMT",
-      "author": "The Filebase Team",
-      "categories": [
-        "S3",
-        "S3 Object Storage"
-      ]
-    },
-    {
-      "title": "Update ERC-8004 Agents for Free with IPNS",
-      "url": "https://filebase.com/blog/update-erc-8004-agents-for-free-with-ipns/",
-      "description": "Immutability is expensive. Learn why smart developers use IPNS to update ERC-8004 agents for free, without breaking trust or paying gas.",
-      "published": "Fri, 13 Feb 2026 21:21:40 GMT",
-      "author": "The Filebase Team",
-      "categories": [
-        "ERC-8004",
-        "IPNS",
-        "Trustless Agents"
-      ]
-    },
-    {
-      "title": "Safer Internet Day: Fix Web Trust with IPFS",
-      "url": "https://filebase.com/blog/safer-internet-day-fix-web-trust-with-ipfs/",
-      "description": "Discover how IPFS content addressing fixes the web's trust gap\u2014preventing tampering, edits, and censorship for a verifiable internet on Safer Internet Day.\n",
-      "published": "Tue, 10 Feb 2026 17:33:43 GMT",
-      "author": "The Filebase Team",
-      "categories": [
-        "safer internet day",
-        "IPFS",
-        "Security"
-      ]
-    },
-    {
-      "title": "Unlimited Bandwidth: The Alternative to AWS S3",
-      "url": "https://filebase.com/blog/unlimited-bandwidth-the-alternative-to-aws-s3/",
-      "description": "Stop paying AWS egress fees. Filebase offers 25TB of object storage with unlimited bandwidth for $500/mo. Perfect for high-traffic static sites.",
-      "published": "Mon, 09 Feb 2026 20:22:11 GMT",
-      "author": "The Filebase Team",
-      "categories": [
-        "unlimited bandwidth",
-        "predictable cloud costs"
-      ]
-    },
-    {
-      "title": "How to Power ERC-8004 Trustless Agents with Filebase",
-      "url": "https://filebase.com/blog/how-to-power-erc-8004-trustless-agents-with-filebase/",
-      "description": "ERC-8004 enables trustless agent identity\u2014but without reliable hosting, agents disappear. Here\u2019s how to use Filebase and IPFS to keep agent identities online.",
-      "published": "Thu, 29 Jan 2026 20:20:47 GMT",
-      "author": "The Filebase Team",
-      "categories": [
-        "ERC-8004",
-        "Trustless Agents"
-      ]
-    },
-    {
-      "title": "Introducing Filebase Sites: Simplified IPFS Websites with IPNS",
-      "url": "https://filebase.com/blog/introducing-filebase-sites-simplified-ipfs-websites-with-ipns/",
-      "description": "Hosting a real website on IPFS has always come with friction: changing CIDs, manual IPNS management, and fragile workflows. Filebase Sites removes the last-mile complexity, giving developers a simple way to publish, update, and maintain decentralized websites without breaking links.",
-      "published": "Wed, 28 Jan 2026 18:22:22 GMT",
-      "author": "The Filebase Team",
-      "categories": [
-        "Sites",
-        "Static Website Hosting"
-      ]
-    },
-    {
-      "title": "Data Privacy Day: Own Your Data with IPFS",
-      "url": "https://filebase.com/blog/data-privacy-day-own-your-data-with-ipfs/",
-      "description": "Encrypt first, then IPFS\u2014privacy that doesn\u2019t depend on the cloud behaving.",
-      "published": "Tue, 27 Jan 2026 19:36:00 GMT",
-      "author": "The Filebase Team",
-      "categories": []
-    },
-    {
-      "title": "How to Migrate Your IPFS Content from Fleek to Filebase",
-      "url": "https://filebase.com/blog/how-to-migrate-your-ipfs-content-from-fleek-to-filebase/",
-      "description": "Migrate your IPFS CIDs from Fleek to Filebase in minutes using our new importer. Learn how to find your Fleek PAT, Project ID, and use code FLEEK.",
-      "published": "Mon, 12 Jan 2026 19:57:09 GMT",
-      "author": "The Filebase Team",
-      "categories": []
-    },
-    {
-      "title": "Never Pay for IPFS Bandwidth Again",
-      "url": "https://filebase.com/blog/never-pay-for-ipfs-bandwidth-again/",
-      "description": "Filebase is introducing an Unlimited plan built for high-throughput IPFS workloads, offering flat, predictable pricing and removing bandwidth as a scaling concern.",
-      "published": "Tue, 16 Dec 2025 20:09:39 GMT",
-      "author": "The Filebase Team",
-      "categories": [
-        "IPFS",
-        "Bandwidth",
-        "Pricing"
-      ]
-    },
-    {
-      "title": "Introducing NFT Backup - Effortless, Multi-Chain NFT Preservation",
-      "url": "https://filebase.com/blog/introducing-nft-backup-effortless-multi-chain-nft-preservation-with-filebase/",
-      "description": "Easily back up NFTs from 24 chains with Filebase. Scan your wallet, preview IPFS metadata and images, and pin everything in one click.",
-      "published": "Tue, 02 Dec 2025 17:22:26 GMT",
-      "author": "The Filebase Team",
-      "categories": [
-        "NFT",
-        "IPFS",
-        "Backup"
-      ]
-    },
-    {
-      "title": "Crypto Payments for Monthly Subscriptions Are Now Live",
-      "url": "https://filebase.com/blog/crypto-payments-for-monthly-subscriptions-are-now-live/",
-      "description": "Pay for your Filebase IPFS subscription with crypto. Now supporting USDC, USDP, and USDG on Ethereum, Solana, Polygon, and Base.",
-      "published": "Mon, 01 Dec 2025 19:27:20 GMT",
-      "author": "The Filebase Team",
-      "categories": [
-        "crypto",
-        "IPFS"
-      ]
-    },
-    {
-      "title": "How to Tag and Organize IPFS Content Using Metadata Tools",
-      "url": "https://filebase.com/blog/how-to-tag-and-organize-ipfs-content-using-metadata-tools/",
-      "description": "Metadata makes IPFS searchable. Here's how Filebase helps structure and manage your decentralized data.",
-      "published": "Tue, 10 Jun 2025 19:58:46 GMT",
-      "author": "The Filebase Team",
-      "categories": []
-    },
-    {
-      "title": "IPFS Storage at Work: 5 Use Cases That Matter",
-      "url": "https://filebase.com/blog/ipfs-storage-at-work-5-use-cases-that-matter/",
-      "description": "Explore 5 real-world use cases where IPFS storage powers NFTs, dApps, research, video, and public data in 2025.",
-      "published": "Tue, 03 Jun 2025 20:04:02 GMT",
-      "author": "The Filebase Team",
-      "categories": []
-    },
-    {
-      "title": "Track Your IPFS Traffic in Real Time with Activity Streams",
-      "url": "https://filebase.com/blog/track-your-ipfs-traffic-in-real-time-with-activity-streams/",
-      "description": "Public IPFS gateways are easy\u2014but blind. Filebase\u2019s Activity Streams give you real-time, per-request visibility into your IPFS traffic.",
-      "published": "Thu, 29 May 2025 20:07:20 GMT",
-      "author": "The Filebase Team",
-      "categories": []
-    }
-  ],
   "repo": "filebase",
   "feeds": [
+    {
+      "source": "https://filebase.com/blog/rss/",
+      "feed_url": "https://filebase.com/blog/rss/",
+      "title": "",
+      "saved": 1,
+      "method": "feed"
+    },
     {
       "source": "https://twitter.com/Filebase",
       "feed_url": "https://twitter.com/Filebase",
@@ -169,5 +16,6 @@
       "method": "none"
     }
   ],
-  "post_count": 0
+  "fetched": "2026-06-27T12:03:07Z",
+  "post_count": 16
 }
