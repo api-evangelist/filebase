@@ -132,6 +132,10 @@ apis:
         email: support@filebase.com
 
 common:
+  - type: DomainSecurity
+    url: security/filebase-domain-security.yml
+  - type: Authentication
+    url: authentication/filebase-authentication.yml
   - type: Website
     url: https://filebase.com/
   - type: Documentation

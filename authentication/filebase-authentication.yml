@@ -1,0 +1,27 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/filebase-ipfs-pinning-service-api-openapi.yml, openapi/filebase-ipfs-rpc-api-openapi.yml,
+  openapi/filebase-platform-api-openapi.yml, openapi/filebase-s3-api-openapi.yml
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: BearerAuth
+  type: http
+  scheme: bearer
+  description: Per-bucket Bearer token for authentication
+  sources:
+  - openapi/filebase-ipfs-pinning-service-api-openapi.yml
+  - openapi/filebase-ipfs-rpc-api-openapi.yml
+  - openapi/filebase-platform-api-openapi.yml
+- name: AWS4Auth
+  type: apiKey
+  in: header
+  parameter: Authorization
+  description: AWS Signature Version 4 (AWS4-HMAC-SHA256) with Filebase access key and secret
+    key. Use endpoint s3.filebase.io and region us-east-1.
+  sources:
+  - openapi/filebase-s3-api-openapi.yml
