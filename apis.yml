@@ -132,6 +132,8 @@ apis:
         email: support@filebase.com
 
 common:
+  - type: AgenticAccess
+    url: agentic-access/filebase-agentic-access.yml
   - type: DomainSecurity
     url: security/filebase-domain-security.yml
   - type: Authentication
