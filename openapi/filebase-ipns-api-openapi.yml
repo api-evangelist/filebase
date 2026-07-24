@@ -1,0 +1,150 @@
+openapi: 3.0.3
+info:
+  title: Filebase IPFS Pinning Service Buckets IPNS API
+  description: The Filebase IPFS Pinning Service API implements the vendor-neutral IPFS Pinning Service specification. Per-bucket Bearer tokens authenticate requests to list, add, retrieve, replace, and delete pinned objects by CID. Supports metadata tagging and filtering by CID, name, status, and timestamps. Compatible with IPFS Desktop, the IPFS CLI, and any third-party tool supporting the pinning service standard. Rate limit is 100 requests per second.
+  version: '1.0'
+  contact:
+    name: Filebase Support
+    url: https://filebase.com/
+    email: support@filebase.com
+  termsOfService: https://filebase.com/terms/
+  license:
+    name: Proprietary
+    url: https://filebase.com/terms/
+servers:
+- url: https://api.filebase.io/v1/ipfs
+  description: Filebase IPFS Pinning Service API
+security:
+- BearerAuth: []
+tags:
+- name: IPNS
+  description: IPNS name publishing and resolution
+paths:
+  /api/v0/name/publish:
+    post:
+      operationId: namePublish
+      summary: Publish IPNS name
+      description: Publish an IPFS path to IPNS.
+      tags:
+      - IPNS
+      parameters:
+      - name: arg
+        in: query
+        required: true
+        description: IPFS path of the object to be published
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: Name of the key to be used (default self)
+        schema:
+          type: string
+          default: self
+      - name: lifetime
+        in: query
+        description: Time duration that the record will be valid for (e.g. 24h)
+        schema:
+          type: string
+          default: 24h
+      - name: ttl
+        in: query
+        description: Time duration this record should be cached for
+        schema:
+          type: string
+      responses:
+        '200':
+          description: IPNS name published
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NamePublishResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/v0/name/resolve:
+    post:
+      operationId: nameResolve
+      summary: Resolve IPNS name
+      description: Resolve IPNS names.
+      tags:
+      - IPNS
+      parameters:
+      - name: arg
+        in: query
+        description: The IPNS name to resolve. Defaults to your node's peerID
+        schema:
+          type: string
+      - name: recursive
+        in: query
+        description: Resolve until the result is not an IPNS name
+        schema:
+          type: boolean
+          default: true
+      - name: nocache
+        in: query
+        description: Do not use cached entries
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Resolved IPNS name
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NameResolveResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    NameResolveResponse:
+      type: object
+      properties:
+        Path:
+          type: string
+          description: Resolved IPFS path
+    NamePublishResponse:
+      type: object
+      properties:
+        Name:
+          type: string
+          description: IPNS name
+        Value:
+          type: string
+          description: Resolved IPFS path
+    Error:
+      type: object
+      properties:
+        Message:
+          type: string
+          description: Error message
+        Code:
+          type: integer
+          description: Error code
+        Type:
+          type: string
+          description: Error type
+  responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized; Bearer token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Per-bucket Bearer token for authentication
+externalDocs:
+  description: Filebase IPFS Pinning Service API Documentation
+  url: https://filebase.com/docs/ipfs/pinning-service-api

@@ -1,0 +1,386 @@
+openapi: 3.0.3
+info:
+  title: Filebase IPFS Pinning Service Buckets Pins API
+  description: The Filebase IPFS Pinning Service API implements the vendor-neutral IPFS Pinning Service specification. Per-bucket Bearer tokens authenticate requests to list, add, retrieve, replace, and delete pinned objects by CID. Supports metadata tagging and filtering by CID, name, status, and timestamps. Compatible with IPFS Desktop, the IPFS CLI, and any third-party tool supporting the pinning service standard. Rate limit is 100 requests per second.
+  version: '1.0'
+  contact:
+    name: Filebase Support
+    url: https://filebase.com/
+    email: support@filebase.com
+  termsOfService: https://filebase.com/terms/
+  license:
+    name: Proprietary
+    url: https://filebase.com/terms/
+servers:
+- url: https://api.filebase.io/v1/ipfs
+  description: Filebase IPFS Pinning Service API
+security:
+- BearerAuth: []
+tags:
+- name: Pins
+  description: IPFS pin management operations
+paths:
+  /pins:
+    get:
+      operationId: listPins
+      summary: List pin objects
+      description: Returns a list of pinned objects, with optional filtering by CID, name, status, before/after timestamps, and limit.
+      tags:
+      - Pins
+      parameters:
+      - name: cid
+        in: query
+        description: Return pin objects for the specified CID(s)
+        schema:
+          type: array
+          items:
+            type: string
+          maxItems: 10
+        style: form
+        explode: false
+      - name: name
+        in: query
+        description: Return pin objects with names that contain the provided string (case-insensitive, partial matches)
+        schema:
+          type: string
+          maxLength: 255
+      - name: match
+        in: query
+        description: Customize the text matching strategy for the name filter
+        schema:
+          type: string
+          enum:
+          - exact
+          - iexact
+          - partial
+          - ipartial
+          default: partial
+      - name: status
+        in: query
+        description: Return pin objects for pins with the specified statuses
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - queued
+            - pinning
+            - pinned
+            - failed
+        style: form
+        explode: false
+      - name: before
+        in: query
+        description: Return results created before provided timestamp
+        schema:
+          type: string
+          format: date-time
+      - name: after
+        in: query
+        description: Return results created after provided timestamp
+        schema:
+          type: string
+          format: date-time
+      - name: limit
+        in: query
+        description: Max records to return
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 10
+      - name: meta
+        in: query
+        description: Return pin objects that match specified metadata
+        schema:
+          type: object
+          additionalProperties:
+            type: string
+          maxProperties: 1000
+        style: deepObject
+        explode: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PinResults'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      operationId: addPin
+      summary: Add pin object
+      description: Add a new pin object for the current access token.
+      tags:
+      - Pins
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pin'
+      responses:
+        '202':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PinStatus'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /pins/{requestId}:
+    get:
+      operationId: getPin
+      summary: Get pin object
+      description: Get a pin object and its status.
+      tags:
+      - Pins
+      parameters:
+      - $ref: '#/components/parameters/requestId'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PinStatus'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      operationId: replacePin
+      summary: Replace pin object
+      description: Replace an existing pin object (shortcut for remove + add).
+      tags:
+      - Pins
+      parameters:
+      - $ref: '#/components/parameters/requestId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pin'
+      responses:
+        '202':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PinStatus'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      operationId: deletePin
+      summary: Remove pin object
+      description: Remove a pin object.
+      tags:
+      - Pins
+      parameters:
+      - $ref: '#/components/parameters/requestId'
+      responses:
+        '202':
+          description: Successful response (no body)
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    Failure:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - reason
+          properties:
+            reason:
+              type: string
+              description: Mandatory string identifying the type of error
+              example: ERROR_CODE_FOR_MACHINES
+            details:
+              type: string
+              description: Optional detailed error message
+              example: Optional explanation for humans
+    PinStatus:
+      type: object
+      required:
+      - requestid
+      - status
+      - created
+      - pin
+      - delegates
+      properties:
+        requestid:
+          type: string
+          description: Globally unique identifier of the pin request
+          example: UniqueIdOfPinRequest
+        status:
+          $ref: '#/components/schemas/Status'
+        created:
+          type: string
+          format: date-time
+          description: Immutable timestamp indicating when a pin request entered the pinning queue
+          example: '2020-07-27T17:32:28Z'
+        pin:
+          $ref: '#/components/schemas/Pin'
+        delegates:
+          type: array
+          description: List of multiaddrs designated by pinning service for p2p connection
+          items:
+            type: string
+          uniqueItems: true
+          minItems: 1
+          maxItems: 20
+        info:
+          type: object
+          description: Optional info for PinStatus response
+          additionalProperties:
+            type: string
+          minProperties: 0
+          maxProperties: 1000
+    Status:
+      type: string
+      enum:
+      - queued
+      - pinning
+      - pinned
+      - failed
+      description: Status of a pin object
+    Pin:
+      type: object
+      required:
+      - cid
+      properties:
+        cid:
+          type: string
+          description: CID to be pinned recursively
+          example: QmCIDHash...
+        name:
+          type: string
+          description: Optional name for pinned data
+          maxLength: 255
+          example: my-file.jpg
+        origins:
+          type: array
+          description: Optional list of multiaddrs known to provide the data
+          items:
+            type: string
+          uniqueItems: true
+          maxItems: 20
+        meta:
+          type: object
+          description: Optional metadata for pin object
+          additionalProperties:
+            type: string
+          minProperties: 0
+          maxProperties: 1000
+    PinResults:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          description: Total number of pin objects that exist for passed query filters
+          minimum: 0
+          example: 1
+        results:
+          type: array
+          description: Paginated results
+          items:
+            $ref: '#/components/schemas/PinStatus'
+          uniqueItems: true
+          minItems: 0
+          maxItems: 1000
+  responses:
+    Unauthorized:
+      description: Unauthorized (401); access token is missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    TooManyRequests:
+      description: Rate limit exceeded (100 req/s)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    BadRequest:
+      description: Bad request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    NotFound:
+      description: The specified resource was not found (404)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    Conflict:
+      description: Conflict (409); requested ID already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+  parameters:
+    requestId:
+      name: requestId
+      in: path
+      required: true
+      description: Unique ID for a pin request
+      schema:
+        type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Per-bucket Bearer token for authentication
+externalDocs:
+  description: Filebase IPFS Pinning Service API Documentation
+  url: https://filebase.com/docs/ipfs/pinning-service-api

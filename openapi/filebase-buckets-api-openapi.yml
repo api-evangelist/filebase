@@ -1,0 +1,262 @@
+openapi: 3.0.3
+info:
+  title: Filebase IPFS Pinning Service Buckets API
+  description: The Filebase IPFS Pinning Service API implements the vendor-neutral IPFS Pinning Service specification. Per-bucket Bearer tokens authenticate requests to list, add, retrieve, replace, and delete pinned objects by CID. Supports metadata tagging and filtering by CID, name, status, and timestamps. Compatible with IPFS Desktop, the IPFS CLI, and any third-party tool supporting the pinning service standard. Rate limit is 100 requests per second.
+  version: '1.0'
+  contact:
+    name: Filebase Support
+    url: https://filebase.com/
+    email: support@filebase.com
+  termsOfService: https://filebase.com/terms/
+  license:
+    name: Proprietary
+    url: https://filebase.com/terms/
+servers:
+- url: https://api.filebase.io/v1/ipfs
+  description: Filebase IPFS Pinning Service API
+security:
+- BearerAuth: []
+tags:
+- name: Buckets
+  description: Per-bucket storage consumption
+paths:
+  /v1/buckets:
+    get:
+      operationId: listBuckets
+      summary: List buckets with storage consumption
+      description: Returns a list of all buckets with per-bucket storage consumption metrics.
+      tags:
+      - Buckets
+      responses:
+        '200':
+          description: List of buckets with storage usage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BucketListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/buckets/{bucketName}/usage:
+    get:
+      operationId: getBucketUsage
+      summary: Get per-bucket storage consumption
+      description: Returns storage consumption metrics for the specified bucket.
+      tags:
+      - Buckets
+      parameters:
+      - name: bucketName
+        in: path
+        required: true
+        description: The name of the bucket
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Bucket storage usage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BucketUsageResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /:
+    get:
+      operationId: listBuckets
+      summary: List all buckets
+      description: Returns a list of all buckets owned by the authenticated user. Equivalent to AWS S3 ListBuckets.
+      tags:
+      - Buckets
+      responses:
+        '200':
+          description: Successfully listed buckets
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ListAllMyBucketsResult'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /{bucket}:
+    parameters:
+    - $ref: '#/components/parameters/bucket'
+    put:
+      operationId: createBucket
+      summary: Create a bucket
+      description: Creates a new S3-compatible bucket. Bucket names must be unique across all Filebase accounts. IPFS-backed buckets automatically pin all objects with 3x geo-redundant replication.
+      tags:
+      - Buckets
+      responses:
+        '200':
+          description: Bucket created successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+    delete:
+      operationId: deleteBucket
+      summary: Delete a bucket
+      description: Deletes an empty bucket. The bucket must be empty before it can be deleted.
+      tags:
+      - Buckets
+      responses:
+        '204':
+          description: Bucket deleted successfully
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound_2'
+        '409':
+          $ref: '#/components/responses/Conflict'
+    head:
+      operationId: headBucket
+      summary: Check bucket existence and access
+      description: Returns metadata about the bucket without returning the bucket's contents.
+      tags:
+      - Buckets
+      responses:
+        '200':
+          description: Bucket exists and is accessible
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound_2'
+components:
+  parameters:
+    bucket:
+      name: bucket
+      in: path
+      required: true
+      description: Name of the bucket
+      schema:
+        type: string
+  schemas:
+    ListAllMyBucketsResult:
+      type: object
+      xml:
+        name: ListAllMyBucketsResult
+      properties:
+        Owner:
+          type: object
+          properties:
+            ID:
+              type: string
+            DisplayName:
+              type: string
+        Buckets:
+          type: array
+          items:
+            type: object
+            properties:
+              Name:
+                type: string
+              CreationDate:
+                type: string
+                format: date-time
+    BucketListResponse:
+      type: object
+      properties:
+        buckets:
+          type: array
+          items:
+            $ref: '#/components/schemas/BucketUsageResponse'
+    BucketUsageResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Bucket name
+        storage_bytes:
+          type: integer
+          format: int64
+          description: Storage used by this bucket in bytes
+        object_count:
+          type: integer
+          format: int64
+          description: Number of objects in this bucket
+        region:
+          type: string
+          description: Bucket region (always us-east-1 for Filebase)
+        created_at:
+          type: string
+          format: date-time
+          description: Bucket creation timestamp
+    Error_2:
+      type: object
+      xml:
+        name: Error
+      properties:
+        Code:
+          type: string
+        Message:
+          type: string
+        Resource:
+          type: string
+        RequestId:
+          type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Error_2'
+    TooManyRequests:
+      description: Rate limit exceeded (500 req/s per account)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: Conflict (bucket already exists or not empty)
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Error_2'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Access denied
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Error_2'
+    NotFound_2:
+      description: Resource not found
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Error_2'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Per-bucket Bearer token for authentication
+externalDocs:
+  description: Filebase IPFS Pinning Service API Documentation
+  url: https://filebase.com/docs/ipfs/pinning-service-api

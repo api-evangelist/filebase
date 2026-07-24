@@ -1,0 +1,179 @@
+openapi: 3.0.3
+info:
+  title: Filebase IPFS Pinning Service Buckets Data Management API
+  description: The Filebase IPFS Pinning Service API implements the vendor-neutral IPFS Pinning Service specification. Per-bucket Bearer tokens authenticate requests to list, add, retrieve, replace, and delete pinned objects by CID. Supports metadata tagging and filtering by CID, name, status, and timestamps. Compatible with IPFS Desktop, the IPFS CLI, and any third-party tool supporting the pinning service standard. Rate limit is 100 requests per second.
+  version: '1.0'
+  contact:
+    name: Filebase Support
+    url: https://filebase.com/
+    email: support@filebase.com
+  termsOfService: https://filebase.com/terms/
+  license:
+    name: Proprietary
+    url: https://filebase.com/terms/
+servers:
+- url: https://api.filebase.io/v1/ipfs
+  description: Filebase IPFS Pinning Service API
+security:
+- BearerAuth: []
+tags:
+- name: Data Management
+  description: Add, retrieve, and import IPFS data
+paths:
+  /api/v0/add:
+    post:
+      operationId: addData
+      summary: Add data to IPFS
+      description: Add a file or directory to IPFS. Returns the CID of the pinned content.
+      tags:
+      - Data Management
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: File content to add to IPFS
+      parameters:
+      - name: pin
+        in: query
+        description: Pin this object when adding
+        schema:
+          type: boolean
+          default: true
+      - name: wrap-with-directory
+        in: query
+        description: Wrap files with a directory object
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Successfully added to IPFS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/v0/cat:
+    post:
+      operationId: getData
+      summary: Get data from IPFS
+      description: Retrieve and output the content of a file identified by its CID.
+      tags:
+      - Data Management
+      parameters:
+      - name: arg
+        in: query
+        required: true
+        description: The IPFS CID or path to retrieve
+        schema:
+          type: string
+      responses:
+        '200':
+          description: File content
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/v0/dag/import:
+    post:
+      operationId: importCar
+      summary: Import a CAR file
+      description: Import a CAR (Content Addressable aRchive) file into IPFS.
+      tags:
+      - Data Management
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: CAR file to import
+      responses:
+        '200':
+          description: CAR import result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarImportResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    AddResponse:
+      type: object
+      properties:
+        Name:
+          type: string
+          description: Filename
+        Hash:
+          type: string
+          description: CID of the added content
+        Size:
+          type: string
+          description: Size of the content in bytes
+    CarImportResponse:
+      type: object
+      properties:
+        Root:
+          type: object
+          properties:
+            Cid:
+              type: object
+              properties:
+                /:
+                  type: string
+            PinErrorMsg:
+              type: string
+    Error:
+      type: object
+      properties:
+        Message:
+          type: string
+          description: Error message
+        Code:
+          type: integer
+          description: Error code
+        Type:
+          type: string
+          description: Error type
+  responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized; Bearer token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Per-bucket Bearer token for authentication
+externalDocs:
+  description: Filebase IPFS Pinning Service API Documentation
+  url: https://filebase.com/docs/ipfs/pinning-service-api

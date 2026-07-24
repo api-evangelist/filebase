@@ -1,0 +1,94 @@
+openapi: 3.0.3
+info:
+  title: Filebase IPFS Pinning Service Buckets Node API
+  description: The Filebase IPFS Pinning Service API implements the vendor-neutral IPFS Pinning Service specification. Per-bucket Bearer tokens authenticate requests to list, add, retrieve, replace, and delete pinned objects by CID. Supports metadata tagging and filtering by CID, name, status, and timestamps. Compatible with IPFS Desktop, the IPFS CLI, and any third-party tool supporting the pinning service standard. Rate limit is 100 requests per second.
+  version: '1.0'
+  contact:
+    name: Filebase Support
+    url: https://filebase.com/
+    email: support@filebase.com
+  termsOfService: https://filebase.com/terms/
+  license:
+    name: Proprietary
+    url: https://filebase.com/terms/
+servers:
+- url: https://api.filebase.io/v1/ipfs
+  description: Filebase IPFS Pinning Service API
+security:
+- BearerAuth: []
+tags:
+- name: Node
+  description: IPFS node information
+paths:
+  /api/v0/id:
+    post:
+      operationId: nodeId
+      summary: Show IPFS node identity
+      description: Show IPFS node id info.
+      tags:
+      - Node
+      responses:
+        '200':
+          description: Node identity information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodeIdResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  responses:
+    Unauthorized:
+      description: Unauthorized; Bearer token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    NodeIdResponse:
+      type: object
+      properties:
+        ID:
+          type: string
+          description: PeerID of the node
+        PublicKey:
+          type: string
+          description: Public key of the node
+        Addresses:
+          type: array
+          items:
+            type: string
+          description: Addresses the node is listening on
+        AgentVersion:
+          type: string
+          description: IPFS version string
+        ProtocolVersion:
+          type: string
+    Error:
+      type: object
+      properties:
+        Message:
+          type: string
+          description: Error message
+        Code:
+          type: integer
+          description: Error code
+        Type:
+          type: string
+          description: Error type
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Per-bucket Bearer token for authentication
+externalDocs:
+  description: Filebase IPFS Pinning Service API Documentation
+  url: https://filebase.com/docs/ipfs/pinning-service-api

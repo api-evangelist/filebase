@@ -1,0 +1,130 @@
+openapi: 3.0.3
+info:
+  title: Filebase IPFS Pinning Service Buckets Keypairs API
+  description: The Filebase IPFS Pinning Service API implements the vendor-neutral IPFS Pinning Service specification. Per-bucket Bearer tokens authenticate requests to list, add, retrieve, replace, and delete pinned objects by CID. Supports metadata tagging and filtering by CID, name, status, and timestamps. Compatible with IPFS Desktop, the IPFS CLI, and any third-party tool supporting the pinning service standard. Rate limit is 100 requests per second.
+  version: '1.0'
+  contact:
+    name: Filebase Support
+    url: https://filebase.com/
+    email: support@filebase.com
+  termsOfService: https://filebase.com/terms/
+  license:
+    name: Proprietary
+    url: https://filebase.com/terms/
+servers:
+- url: https://api.filebase.io/v1/ipfs
+  description: Filebase IPFS Pinning Service API
+security:
+- BearerAuth: []
+tags:
+- name: Keypairs
+  description: IPNS keypair management
+paths:
+  /api/v0/key/gen:
+    post:
+      operationId: keyGen
+      summary: Create a new keypair
+      description: Create a new keypair for use with IPNS.
+      tags:
+      - Keypairs
+      parameters:
+      - name: arg
+        in: query
+        required: true
+        description: Name of the key to create
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: Type of the key to create
+        schema:
+          type: string
+          enum:
+          - rsa
+          - ed25519
+          default: ed25519
+      - name: size
+        in: query
+        description: Size of the key to generate (only for RSA)
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Key created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeyResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/v0/key/list:
+    post:
+      operationId: keyList
+      summary: List all local keypairs
+      description: List all keypairs available for IPNS.
+      tags:
+      - Keypairs
+      responses:
+        '200':
+          description: List of keypairs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeyListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized; Bearer token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    KeyListResponse:
+      type: object
+      properties:
+        Keys:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyResponse'
+    KeyResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Key ID (PeerID format)
+        Name:
+          type: string
+          description: Key name
+    Error:
+      type: object
+      properties:
+        Message:
+          type: string
+          description: Error message
+        Code:
+          type: integer
+          description: Error code
+        Type:
+          type: string
+          description: Error type
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Per-bucket Bearer token for authentication
+externalDocs:
+  description: Filebase IPFS Pinning Service API Documentation
+  url: https://filebase.com/docs/ipfs/pinning-service-api

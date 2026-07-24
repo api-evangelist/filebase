@@ -1,0 +1,202 @@
+openapi: 3.0.3
+info:
+  title: Filebase IPFS Pinning Service Buckets MFS API
+  description: The Filebase IPFS Pinning Service API implements the vendor-neutral IPFS Pinning Service specification. Per-bucket Bearer tokens authenticate requests to list, add, retrieve, replace, and delete pinned objects by CID. Supports metadata tagging and filtering by CID, name, status, and timestamps. Compatible with IPFS Desktop, the IPFS CLI, and any third-party tool supporting the pinning service standard. Rate limit is 100 requests per second.
+  version: '1.0'
+  contact:
+    name: Filebase Support
+    url: https://filebase.com/
+    email: support@filebase.com
+  termsOfService: https://filebase.com/terms/
+  license:
+    name: Proprietary
+    url: https://filebase.com/terms/
+servers:
+- url: https://api.filebase.io/v1/ipfs
+  description: Filebase IPFS Pinning Service API
+security:
+- BearerAuth: []
+tags:
+- name: MFS
+  description: Mutable File System operations
+paths:
+  /api/v0/files/ls:
+    post:
+      operationId: mfsList
+      summary: List MFS directory contents
+      description: List files and directories in the Mutable File System (MFS).
+      tags:
+      - MFS
+      parameters:
+      - name: arg
+        in: query
+        description: Path to show listing for (default /)
+        schema:
+          type: string
+          default: /
+      - name: long
+        in: query
+        description: Use long listing format
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Directory listing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MfsLsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/v0/files/mkdir:
+    post:
+      operationId: mfsMkdir
+      summary: Create MFS directory
+      description: Make a directory in the Mutable File System (MFS).
+      tags:
+      - MFS
+      parameters:
+      - name: arg
+        in: query
+        required: true
+        description: Path to directory to make
+        schema:
+          type: string
+      - name: parents
+        in: query
+        description: Create parent directories as needed
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Directory created
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/v0/files/write:
+    post:
+      operationId: mfsWrite
+      summary: Write to MFS file
+      description: Write to a mutable file in MFS.
+      tags:
+      - MFS
+      parameters:
+      - name: arg
+        in: query
+        required: true
+        description: Path to write to
+        schema:
+          type: string
+      - name: create
+        in: query
+        description: Create the file if it does not exist
+        schema:
+          type: boolean
+          default: false
+      - name: truncate
+        in: query
+        description: Truncate the file to size zero before writing
+        schema:
+          type: boolean
+          default: false
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: File written successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/v0/files/rm:
+    post:
+      operationId: mfsRemove
+      summary: Remove MFS file or directory
+      description: Remove a file or directory from MFS.
+      tags:
+      - MFS
+      parameters:
+      - name: arg
+        in: query
+        required: true
+        description: File to remove
+        schema:
+          type: string
+      - name: recursive
+        in: query
+        description: Recursively remove directories
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: File removed successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  responses:
+    Unauthorized:
+      description: Unauthorized; Bearer token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    MfsLsResponse:
+      type: object
+      properties:
+        Entries:
+          type: array
+          items:
+            type: object
+            properties:
+              Name:
+                type: string
+              Type:
+                type: integer
+              Size:
+                type: integer
+                format: int64
+              Hash:
+                type: string
+    Error:
+      type: object
+      properties:
+        Message:
+          type: string
+          description: Error message
+        Code:
+          type: integer
+          description: Error code
+        Type:
+          type: string
+          description: Error type
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Per-bucket Bearer token for authentication
+externalDocs:
+  description: Filebase IPFS Pinning Service API Documentation
+  url: https://filebase.com/docs/ipfs/pinning-service-api

@@ -1,0 +1,97 @@
+openapi: 3.0.3
+info:
+  title: Filebase IPFS Pinning Service Buckets Multipart Upload API
+  description: The Filebase IPFS Pinning Service API implements the vendor-neutral IPFS Pinning Service specification. Per-bucket Bearer tokens authenticate requests to list, add, retrieve, replace, and delete pinned objects by CID. Supports metadata tagging and filtering by CID, name, status, and timestamps. Compatible with IPFS Desktop, the IPFS CLI, and any third-party tool supporting the pinning service standard. Rate limit is 100 requests per second.
+  version: '1.0'
+  contact:
+    name: Filebase Support
+    url: https://filebase.com/
+    email: support@filebase.com
+  termsOfService: https://filebase.com/terms/
+  license:
+    name: Proprietary
+    url: https://filebase.com/terms/
+servers:
+- url: https://api.filebase.io/v1/ipfs
+  description: Filebase IPFS Pinning Service API
+security:
+- BearerAuth: []
+tags:
+- name: Multipart Upload
+  description: Large file multipart upload operations
+paths:
+  /{bucket}/{key}?uploads:
+    parameters:
+    - $ref: '#/components/parameters/bucket'
+    - $ref: '#/components/parameters/key'
+    post:
+      operationId: createMultipartUpload
+      summary: Initiate multipart upload
+      description: Initiates a multipart upload and returns an upload ID. Use for large file uploads by splitting them into parts.
+      tags:
+      - Multipart Upload
+      responses:
+        '200':
+          description: Multipart upload initiated
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/InitiateMultipartUploadResult'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+components:
+  schemas:
+    InitiateMultipartUploadResult:
+      type: object
+      xml:
+        name: InitiateMultipartUploadResult
+      properties:
+        Bucket:
+          type: string
+        Key:
+          type: string
+        UploadId:
+          type: string
+    Error:
+      type: object
+      xml:
+        name: Error
+      properties:
+        Code:
+          type: string
+        Message:
+          type: string
+        Resource:
+          type: string
+        RequestId:
+          type: string
+  parameters:
+    bucket:
+      name: bucket
+      in: path
+      required: true
+      description: Name of the bucket
+      schema:
+        type: string
+    key:
+      name: key
+      in: path
+      required: true
+      description: Object key (file path within the bucket)
+      schema:
+        type: string
+  responses:
+    Forbidden:
+      description: Access denied
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Per-bucket Bearer token for authentication
+externalDocs:
+  description: Filebase IPFS Pinning Service API Documentation
+  url: https://filebase.com/docs/ipfs/pinning-service-api
