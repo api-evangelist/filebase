@@ -1,0 +1,34 @@
+{
+  "provider": "filebase",
+  "sources": [
+    "filebase-buckets-api-openapi.yml",
+    "filebase-data-management-api-openapi.yml",
+    "filebase-ipns-api-openapi.yml",
+    "filebase-keypairs-api-openapi.yml",
+    "filebase-mfs-api-openapi.yml",
+    "filebase-multipart-upload-api-openapi.yml",
+    "filebase-node-api-openapi.yml",
+    "filebase-objects-api-openapi.yml",
+    "filebase-pinning-api-openapi.yml",
+    "filebase-pins-api-openapi.yml",
+    "filebase-usage-api-openapi.yml"
+  ],
+  "outputs": [
+    "filebase-buckets-api-openapi.yml",
+    "filebase-data-management-api-openapi.yml",
+    "filebase-ipns-api-openapi.yml",
+    "filebase-keypairs-api-openapi.yml",
+    "filebase-mfs-api-openapi.yml",
+    "filebase-multipart-upload-api-openapi.yml",
+    "filebase-node-api-openapi.yml",
+    "filebase-objects-api-openapi.yml",
+    "filebase-pinning-api-openapi.yml",
+    "filebase-pins-api-openapi.yml",
+    "filebase-usage-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
