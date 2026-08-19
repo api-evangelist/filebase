@@ -1,0 +1,46 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Filebase IPFS Pinning Service Buckets Usage API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Usage",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get account storage usage",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.filebase.io/v1/ipfs/v1/usage"
+          },
+          "docs": "Returns total storage usage in bytes for the account across all buckets."
+        },
+        {
+          "info": {
+            "name": "Get 24-hour trailing bandwidth metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.filebase.io/v1/ipfs/v1/usage/bandwidth"
+          },
+          "docs": "Returns bandwidth usage over the trailing 24-hour period for the account."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

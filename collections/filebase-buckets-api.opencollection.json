@@ -1,0 +1,122 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Filebase IPFS Pinning Service Buckets API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Buckets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List buckets with storage consumption",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.filebase.io/v1/ipfs/v1/buckets"
+          },
+          "docs": "Returns a list of all buckets with per-bucket storage consumption metrics."
+        },
+        {
+          "info": {
+            "name": "Get per-bucket storage consumption",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.filebase.io/v1/ipfs/v1/buckets/:bucketName/usage",
+            "params": [
+              {
+                "name": "bucketName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the bucket"
+              }
+            ]
+          },
+          "docs": "Returns storage consumption metrics for the specified bucket."
+        },
+        {
+          "info": {
+            "name": "List all buckets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.filebase.io/v1/ipfs/"
+          },
+          "docs": "Returns a list of all buckets owned by the authenticated user. Equivalent to AWS S3 ListBuckets."
+        },
+        {
+          "info": {
+            "name": "Create a bucket",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.filebase.io/v1/ipfs/:bucket",
+            "params": [
+              {
+                "name": "bucket",
+                "value": "",
+                "type": "path",
+                "description": "Name of the bucket"
+              }
+            ]
+          },
+          "docs": "Creates a new S3-compatible bucket. Bucket names must be unique across all Filebase accounts. IPFS-backed buckets automatically pin all objects with 3x geo-redundant replication."
+        },
+        {
+          "info": {
+            "name": "Delete a bucket",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.filebase.io/v1/ipfs/:bucket",
+            "params": [
+              {
+                "name": "bucket",
+                "value": "",
+                "type": "path",
+                "description": "Name of the bucket"
+              }
+            ]
+          },
+          "docs": "Deletes an empty bucket. The bucket must be empty before it can be deleted."
+        },
+        {
+          "info": {
+            "name": "Check bucket existence and access",
+            "type": "http"
+          },
+          "http": {
+            "method": "HEAD",
+            "url": "https://api.filebase.io/v1/ipfs/:bucket",
+            "params": [
+              {
+                "name": "bucket",
+                "value": "",
+                "type": "path",
+                "description": "Name of the bucket"
+              }
+            ]
+          },
+          "docs": "Returns metadata about the bucket without returning the bucket's contents."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

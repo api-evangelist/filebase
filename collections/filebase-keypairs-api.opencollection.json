@@ -1,0 +1,66 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Filebase IPFS Pinning Service Buckets Keypairs API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Keypairs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a new keypair",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.filebase.io/v1/ipfs/api/v0/key/gen",
+            "params": [
+              {
+                "name": "arg",
+                "value": "",
+                "type": "query",
+                "description": "Name of the key to create"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Type of the key to create"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Size of the key to generate (only for RSA)"
+              }
+            ]
+          },
+          "docs": "Create a new keypair for use with IPNS."
+        },
+        {
+          "info": {
+            "name": "List all local keypairs",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.filebase.io/v1/ipfs/api/v0/key/list"
+          },
+          "docs": "List all keypairs available for IPNS."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

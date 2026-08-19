@@ -1,0 +1,161 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Filebase IPFS Pinning Service Buckets Pins API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Pins",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List pin objects",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.filebase.io/v1/ipfs/pins",
+            "params": [
+              {
+                "name": "cid",
+                "value": "",
+                "type": "query",
+                "description": "Return pin objects for the specified CID(s)"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Return pin objects with names that contain the provided string (case-insensitive, partial matches)"
+              },
+              {
+                "name": "match",
+                "value": "",
+                "type": "query",
+                "description": "Customize the text matching strategy for the name filter"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Return pin objects for pins with the specified statuses"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Return results created before provided timestamp"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Return results created after provided timestamp"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Max records to return"
+              },
+              {
+                "name": "meta",
+                "value": "",
+                "type": "query",
+                "description": "Return pin objects that match specified metadata"
+              }
+            ]
+          },
+          "docs": "Returns a list of pinned objects, with optional filtering by CID, name, status, before/after timestamps, and limit."
+        },
+        {
+          "info": {
+            "name": "Add pin object",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.filebase.io/v1/ipfs/pins",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a new pin object for the current access token."
+        },
+        {
+          "info": {
+            "name": "Get pin object",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.filebase.io/v1/ipfs/pins/:requestId",
+            "params": [
+              {
+                "name": "requestId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID for a pin request"
+              }
+            ]
+          },
+          "docs": "Get a pin object and its status."
+        },
+        {
+          "info": {
+            "name": "Replace pin object",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.filebase.io/v1/ipfs/pins/:requestId",
+            "params": [
+              {
+                "name": "requestId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID for a pin request"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Replace an existing pin object (shortcut for remove + add)."
+        },
+        {
+          "info": {
+            "name": "Remove pin object",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.filebase.io/v1/ipfs/pins/:requestId",
+            "params": [
+              {
+                "name": "requestId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID for a pin request"
+              }
+            ]
+          },
+          "docs": "Remove a pin object."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

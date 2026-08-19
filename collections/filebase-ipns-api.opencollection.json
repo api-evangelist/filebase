@@ -1,0 +1,92 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Filebase IPFS Pinning Service Buckets IPNS API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "IPNS",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Publish IPNS name",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.filebase.io/v1/ipfs/api/v0/name/publish",
+            "params": [
+              {
+                "name": "arg",
+                "value": "",
+                "type": "query",
+                "description": "IPFS path of the object to be published"
+              },
+              {
+                "name": "key",
+                "value": "",
+                "type": "query",
+                "description": "Name of the key to be used (default self)"
+              },
+              {
+                "name": "lifetime",
+                "value": "",
+                "type": "query",
+                "description": "Time duration that the record will be valid for (e.g. 24h)"
+              },
+              {
+                "name": "ttl",
+                "value": "",
+                "type": "query",
+                "description": "Time duration this record should be cached for"
+              }
+            ]
+          },
+          "docs": "Publish an IPFS path to IPNS."
+        },
+        {
+          "info": {
+            "name": "Resolve IPNS name",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.filebase.io/v1/ipfs/api/v0/name/resolve",
+            "params": [
+              {
+                "name": "arg",
+                "value": "",
+                "type": "query",
+                "description": "The IPNS name to resolve. Defaults to your node's peerID"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Resolve until the result is not an IPNS name"
+              },
+              {
+                "name": "nocache",
+                "value": "",
+                "type": "query",
+                "description": "Do not use cached entries"
+              }
+            ]
+          },
+          "docs": "Resolve IPNS names."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

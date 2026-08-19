@@ -1,0 +1,140 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Filebase IPFS Pinning Service Buckets MFS API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "MFS",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List MFS directory contents",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.filebase.io/v1/ipfs/api/v0/files/ls",
+            "params": [
+              {
+                "name": "arg",
+                "value": "",
+                "type": "query",
+                "description": "Path to show listing for (default /)"
+              },
+              {
+                "name": "long",
+                "value": "",
+                "type": "query",
+                "description": "Use long listing format"
+              }
+            ]
+          },
+          "docs": "List files and directories in the Mutable File System (MFS)."
+        },
+        {
+          "info": {
+            "name": "Create MFS directory",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.filebase.io/v1/ipfs/api/v0/files/mkdir",
+            "params": [
+              {
+                "name": "arg",
+                "value": "",
+                "type": "query",
+                "description": "Path to directory to make"
+              },
+              {
+                "name": "parents",
+                "value": "",
+                "type": "query",
+                "description": "Create parent directories as needed"
+              }
+            ]
+          },
+          "docs": "Make a directory in the Mutable File System (MFS)."
+        },
+        {
+          "info": {
+            "name": "Write to MFS file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.filebase.io/v1/ipfs/api/v0/files/write",
+            "params": [
+              {
+                "name": "arg",
+                "value": "",
+                "type": "query",
+                "description": "Path to write to"
+              },
+              {
+                "name": "create",
+                "value": "",
+                "type": "query",
+                "description": "Create the file if it does not exist"
+              },
+              {
+                "name": "truncate",
+                "value": "",
+                "type": "query",
+                "description": "Truncate the file to size zero before writing"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Write to a mutable file in MFS."
+        },
+        {
+          "info": {
+            "name": "Remove MFS file or directory",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.filebase.io/v1/ipfs/api/v0/files/rm",
+            "params": [
+              {
+                "name": "arg",
+                "value": "",
+                "type": "query",
+                "description": "File to remove"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively remove directories"
+              }
+            ]
+          },
+          "docs": "Remove a file or directory from MFS."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

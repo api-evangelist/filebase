@@ -1,0 +1,105 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Filebase IPFS Service Buckets Pinning API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Pinning",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Pin an object",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.filebase.io/v1/ipfs/api/v0/pin/add",
+            "params": [
+              {
+                "name": "arg",
+                "value": "",
+                "type": "query",
+                "description": "Path to object(s) to be pinned"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively pin the object linked to by the specified object(s)"
+              }
+            ]
+          },
+          "docs": "Pin objects to local storage by CID."
+        },
+        {
+          "info": {
+            "name": "Remove pinned objects",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.filebase.io/v1/ipfs/api/v0/pin/rm",
+            "params": [
+              {
+                "name": "arg",
+                "value": "",
+                "type": "query",
+                "description": "Path to object(s) to be unpinned"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively unpin the object linked to by the specified object(s)"
+              }
+            ]
+          },
+          "docs": "Remove pinned objects from local storage."
+        },
+        {
+          "info": {
+            "name": "List pinned objects",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.filebase.io/v1/ipfs/api/v0/pin/ls",
+            "params": [
+              {
+                "name": "arg",
+                "value": "",
+                "type": "query",
+                "description": "Path to object(s) to be listed"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of pinned keys to list"
+              },
+              {
+                "name": "quiet",
+                "value": "",
+                "type": "query",
+                "description": "Write just hashes of objects"
+              }
+            ]
+          },
+          "docs": "List objects pinned to local storage."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

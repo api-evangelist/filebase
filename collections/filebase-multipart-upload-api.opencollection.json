@@ -1,0 +1,49 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Filebase IPFS Pinning Service Buckets Multipart Upload API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Multipart Upload",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Initiate multipart upload",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.filebase.io/v1/ipfs/:bucket/:key?uploads",
+            "params": [
+              {
+                "name": "bucket",
+                "value": "",
+                "type": "path",
+                "description": "Name of the bucket"
+              },
+              {
+                "name": "key",
+                "value": "",
+                "type": "path",
+                "description": "Object key (file path within the bucket)"
+              }
+            ]
+          },
+          "docs": "Initiates a multipart upload and returns an upload ID. Use for large file uploads by splitting them into parts."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

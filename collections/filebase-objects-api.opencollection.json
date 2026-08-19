@@ -1,0 +1,191 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Filebase IPFS Pinning Service Buckets Objects API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Objects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List objects in a bucket",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.filebase.io/v1/ipfs/:bucket",
+            "params": [
+              {
+                "name": "bucket",
+                "value": "",
+                "type": "path",
+                "description": "Name of the bucket"
+              },
+              {
+                "name": "prefix",
+                "value": "",
+                "type": "query",
+                "description": "Limits the response to keys that begin with the specified prefix"
+              },
+              {
+                "name": "delimiter",
+                "value": "",
+                "type": "query",
+                "description": "A delimiter is a character you use to group keys"
+              },
+              {
+                "name": "marker",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the key to start with when listing objects"
+              },
+              {
+                "name": "max-keys",
+                "value": "",
+                "type": "query",
+                "description": "Sets the maximum number of keys returned (default 1000)"
+              },
+              {
+                "name": "list-type",
+                "value": "",
+                "type": "query",
+                "description": "Version 2 of list objects request (set to 2)"
+              },
+              {
+                "name": "continuation-token",
+                "value": "",
+                "type": "query",
+                "description": "Indicates Amazon S3 that the list is being continued with a token (V2)"
+              }
+            ]
+          },
+          "docs": "Returns some or all (up to 1,000) of the objects in a bucket. Use list-type=2 for ListObjectsV2."
+        },
+        {
+          "info": {
+            "name": "Download an object",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.filebase.io/v1/ipfs/:bucket/:key",
+            "headers": [
+              {
+                "name": "Range",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "bucket",
+                "value": "",
+                "type": "path",
+                "description": "Name of the bucket"
+              },
+              {
+                "name": "key",
+                "value": "",
+                "type": "path",
+                "description": "Object key (file path within the bucket)"
+              }
+            ]
+          },
+          "docs": "Retrieves an object from Filebase. Returns the object data."
+        },
+        {
+          "info": {
+            "name": "Upload an object",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.filebase.io/v1/ipfs/:bucket/:key",
+            "headers": [
+              {
+                "name": "x-amz-meta-cid",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "bucket",
+                "value": "",
+                "type": "path",
+                "description": "Name of the bucket"
+              },
+              {
+                "name": "key",
+                "value": "",
+                "type": "path",
+                "description": "Object key (file path within the bucket)"
+              }
+            ]
+          },
+          "docs": "Adds an object to a bucket. Objects are automatically pinned to IPFS for IPFS-backed buckets and receive 3x geo-redundant replication. The CID is returned in the x-amz-meta-cid response header."
+        },
+        {
+          "info": {
+            "name": "Delete an object",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.filebase.io/v1/ipfs/:bucket/:key",
+            "params": [
+              {
+                "name": "bucket",
+                "value": "",
+                "type": "path",
+                "description": "Name of the bucket"
+              },
+              {
+                "name": "key",
+                "value": "",
+                "type": "path",
+                "description": "Object key (file path within the bucket)"
+              }
+            ]
+          },
+          "docs": "Removes an object from a bucket."
+        },
+        {
+          "info": {
+            "name": "Get object metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "HEAD",
+            "url": "https://api.filebase.io/v1/ipfs/:bucket/:key",
+            "params": [
+              {
+                "name": "bucket",
+                "value": "",
+                "type": "path",
+                "description": "Name of the bucket"
+              },
+              {
+                "name": "key",
+                "value": "",
+                "type": "path",
+                "description": "Object key (file path within the bucket)"
+              }
+            ]
+          },
+          "docs": "Retrieves metadata from an object without returning the object itself."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

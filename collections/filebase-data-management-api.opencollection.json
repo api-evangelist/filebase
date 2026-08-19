@@ -1,0 +1,99 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Filebase IPFS Pinning Service Buckets Data Management API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Data Management",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add data to IPFS",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.filebase.io/v1/ipfs/api/v0/add",
+            "params": [
+              {
+                "name": "pin",
+                "value": "",
+                "type": "query",
+                "description": "Pin this object when adding"
+              },
+              {
+                "name": "wrap-with-directory",
+                "value": "",
+                "type": "query",
+                "description": "Wrap files with a directory object"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Add a file or directory to IPFS. Returns the CID of the pinned content."
+        },
+        {
+          "info": {
+            "name": "Get data from IPFS",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.filebase.io/v1/ipfs/api/v0/cat",
+            "params": [
+              {
+                "name": "arg",
+                "value": "",
+                "type": "query",
+                "description": "The IPFS CID or path to retrieve"
+              }
+            ]
+          },
+          "docs": "Retrieve and output the content of a file identified by its CID."
+        },
+        {
+          "info": {
+            "name": "Import a CAR file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.filebase.io/v1/ipfs/api/v0/dag/import",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Import a CAR (Content Addressable aRchive) file into IPFS."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
