@@ -1,8 +1,8 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Filebase IPFS Pinning Service Buckets Usage API
-  description: The Filebase IPFS Pinning Service API implements the vendor-neutral IPFS Pinning Service specification. Per-bucket Bearer tokens authenticate requests to list, add, retrieve, replace, and delete pinned objects by CID. Supports metadata tagging and filtering by CID, name, status, and timestamps. Compatible with IPFS Desktop, the IPFS CLI, and any third-party tool supporting the pinning service standard. Rate limit is 100 requests per second.
-  version: '1.0'
+  title: Filebase Platform Usage API
+  description: The Filebase Platform API provides account-level operations including total storage usage, 24-hour trailing bandwidth metrics, and per-bucket storage consumption. Authentication uses HTTP Basic auth with base64-encoded access key and secret key pairs as a Bearer token. Rate limit is 500 requests per second per account.
+  version: v1
   contact:
     name: Filebase Support
     url: https://filebase.com/
@@ -12,8 +12,8 @@ info:
     name: Proprietary
     url: https://filebase.com/terms/
 servers:
-- url: https://api.filebase.io/v1/ipfs
-  description: Filebase IPFS Pinning Service API
+- url: https://api.filebase.io
+  description: Filebase Platform API
 security:
 - BearerAuth: []
 tags:
@@ -57,34 +57,16 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
-  responses:
-    Unauthorized:
-      description: Authentication failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Rate limit exceeded (500 req/s per account)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    UsageResponse:
+    Error:
       type: object
       properties:
-        storage_bytes:
-          type: integer
-          format: int64
-          description: Total storage used in bytes
-        object_count:
-          type: integer
-          format: int64
-          description: Total number of objects stored
-        bucket_count:
-          type: integer
-          description: Total number of buckets
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
     BandwidthResponse:
       type: object
       properties:
@@ -100,20 +82,38 @@ components:
           type: string
           format: date-time
           description: End of the measurement period
-    Error:
+    UsageResponse:
       type: object
       properties:
-        code:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
+        storage_bytes:
+          type: integer
+          format: int64
+          description: Total storage used in bytes
+        object_count:
+          type: integer
+          format: int64
+          description: Total number of objects stored
+        bucket_count:
+          type: integer
+          description: Total number of buckets
+  responses:
+    Unauthorized:
+      description: Authentication failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded (500 req/s per account)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     BearerAuth:
       type: http
       scheme: bearer
-      description: Per-bucket Bearer token for authentication
+      description: HTTP Basic authentication encoded as base64(accessKey:secretKey) passed as a Bearer token in the Authorization header.
 externalDocs:
-  description: Filebase IPFS Pinning Service API Documentation
-  url: https://filebase.com/docs/ipfs/pinning-service-api
+  description: Filebase Platform API Documentation
+  url: https://filebase.com/docs/platform-api/overview

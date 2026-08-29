@@ -1,7 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Filebase IPFS Pinning Service Buckets Keypairs API
-  description: The Filebase IPFS Pinning Service API implements the vendor-neutral IPFS Pinning Service specification. Per-bucket Bearer tokens authenticate requests to list, add, retrieve, replace, and delete pinned objects by CID. Supports metadata tagging and filtering by CID, name, status, and timestamps. Compatible with IPFS Desktop, the IPFS CLI, and any third-party tool supporting the pinning service standard. Rate limit is 100 requests per second.
+  title: Filebase IPFS RPC Keypairs API
+  description: The Filebase IPFS RPC API exposes core IPFS daemon functionality through an HTTP interface. Bucket-specific Bearer tokens authenticate all POST requests. Capabilities span data management (add, get, CAR import), pinning (pin/unpin/list), Mutable File System (MFS) operations, keypair management, IPNS publishing and resolution, and daemon information. Enables fine-grained programmatic control over IPFS operations without running a local node.
   version: '1.0'
   contact:
     name: Filebase Support
@@ -12,8 +12,8 @@ info:
     name: Proprietary
     url: https://filebase.com/terms/
 servers:
-- url: https://api.filebase.io/v1/ipfs
-  description: Filebase IPFS Pinning Service API
+- url: https://rpc.filebase.io
+  description: Filebase IPFS RPC API
 security:
 - BearerAuth: []
 tags:
@@ -78,36 +78,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    InternalServerError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized; Bearer token missing or invalid
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    KeyListResponse:
-      type: object
-      properties:
-        Keys:
-          type: array
-          items:
-            $ref: '#/components/schemas/KeyResponse'
-    KeyResponse:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Key ID (PeerID format)
-        Name:
-          type: string
-          description: Key name
     Error:
       type: object
       properties:
@@ -120,11 +91,40 @@ components:
         Type:
           type: string
           description: Error type
+    KeyResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Key ID (PeerID format)
+        Name:
+          type: string
+          description: Key name
+    KeyListResponse:
+      type: object
+      properties:
+        Keys:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyResponse'
+  responses:
+    Unauthorized:
+      description: Unauthorized; Bearer token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     BearerAuth:
       type: http
       scheme: bearer
-      description: Per-bucket Bearer token for authentication
+      description: Bucket-specific Bearer token for authentication
 externalDocs:
-  description: Filebase IPFS Pinning Service API Documentation
-  url: https://filebase.com/docs/ipfs/pinning-service-api
+  description: Filebase IPFS RPC API Documentation
+  url: https://filebase.com/docs/ipfs/rpc-api

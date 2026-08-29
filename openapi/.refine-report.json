@@ -1,34 +1,46 @@
 {
   "provider": "filebase",
   "sources": [
-    "filebase-buckets-api-openapi.yml",
-    "filebase-data-management-api-openapi.yml",
-    "filebase-ipns-api-openapi.yml",
-    "filebase-keypairs-api-openapi.yml",
-    "filebase-mfs-api-openapi.yml",
-    "filebase-multipart-upload-api-openapi.yml",
-    "filebase-node-api-openapi.yml",
-    "filebase-objects-api-openapi.yml",
-    "filebase-pinning-api-openapi.yml",
-    "filebase-pins-api-openapi.yml",
-    "filebase-usage-api-openapi.yml"
+    "_original/filebase-ipfs-pinning-service-api-openapi.yml",
+    "_original/filebase-ipfs-rpc-api-openapi.yml",
+    "_original/filebase-platform-api-openapi.yml",
+    "_original/filebase-s3-api-openapi.yml"
   ],
   "outputs": [
-    "filebase-buckets-api-openapi.yml",
+    "filebase-pins-api-openapi.yml",
     "filebase-data-management-api-openapi.yml",
     "filebase-ipns-api-openapi.yml",
     "filebase-keypairs-api-openapi.yml",
     "filebase-mfs-api-openapi.yml",
-    "filebase-multipart-upload-api-openapi.yml",
     "filebase-node-api-openapi.yml",
-    "filebase-objects-api-openapi.yml",
     "filebase-pinning-api-openapi.yml",
-    "filebase-pins-api-openapi.yml",
-    "filebase-usage-api-openapi.yml"
+    "filebase-buckets-api-openapi.yml",
+    "filebase-usage-api-openapi.yml",
+    "filebase-multipart-upload-api-openapi.yml",
+    "filebase-objects-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (4 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "filebase-ipfs-pinning-service-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "filebase-ipfs-rpc-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "filebase-platform-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "filebase-s3-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "tag 'Buckets' spans 2 source specs (filebase-platform-api-openapi.yml, filebase-s3-api-openapi.yml): per-path servers applied"
+  ],
+  "skipped": [
+    "filebase-buckets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "filebase-data-management-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "filebase-ipns-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "filebase-keypairs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "filebase-mfs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "filebase-multipart-upload-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "filebase-node-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "filebase-objects-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "filebase-pinning-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "filebase-pins-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "filebase-usage-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

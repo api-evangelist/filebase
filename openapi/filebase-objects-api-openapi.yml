@@ -1,8 +1,8 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Filebase IPFS Pinning Service Buckets Objects API
-  description: The Filebase IPFS Pinning Service API implements the vendor-neutral IPFS Pinning Service specification. Per-bucket Bearer tokens authenticate requests to list, add, retrieve, replace, and delete pinned objects by CID. Supports metadata tagging and filtering by CID, name, status, and timestamps. Compatible with IPFS Desktop, the IPFS CLI, and any third-party tool supporting the pinning service standard. Rate limit is 100 requests per second.
-  version: '1.0'
+  title: Filebase S3-Compatible Objects API
+  description: The Filebase S3-Compatible API provides standard AWS S3 protocol support for bucket and object management. Developers can use any existing S3 SDK, CLI tool, or framework with endpoint s3.filebase.io and region us-east-1. Authentication uses AWS Signature Version 4 (AWS4-HMAC-SHA256) with Filebase access key and secret key pairs. Supported operations include bucket creation and deletion, object upload (including multipart), copy, delete, and listing. Objects stored in IPFS-backed buckets are automatically pinned with 3x geo-redundant replication.
+  version: '2006-03-01'
   contact:
     name: Filebase Support
     url: https://filebase.com/
@@ -12,10 +12,16 @@ info:
     name: Proprietary
     url: https://filebase.com/terms/
 servers:
-- url: https://api.filebase.io/v1/ipfs
-  description: Filebase IPFS Pinning Service API
+- url: https://s3.filebase.io
+  description: Filebase S3-Compatible Endpoint
+- url: https://{bucket}.s3.filebase.io
+  description: Filebase S3 Virtual-Hosted-Style Endpoint
+  variables:
+    bucket:
+      default: my-bucket
+      description: Bucket name
 security:
-- BearerAuth: []
+- AWS4Auth: []
 tags:
 - name: Objects
   description: Object upload, download, copy, delete, and metadata
@@ -214,35 +220,20 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  parameters:
-    bucket:
-      name: bucket
-      in: path
-      required: true
-      description: Name of the bucket
-      schema:
-        type: string
-    key:
-      name: key
-      in: path
-      required: true
-      description: Object key (file path within the bucket)
-      schema:
-        type: string
-  responses:
-    NotFound:
-      description: Resource not found
-      content:
-        application/xml:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: Access denied
-      content:
-        application/xml:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    Error:
+      type: object
+      xml:
+        name: Error
+      properties:
+        Code:
+          type: string
+        Message:
+          type: string
+        Resource:
+          type: string
+        RequestId:
+          type: string
     CopyObjectResult:
       type: object
       xml:
@@ -287,24 +278,40 @@ components:
                 format: int64
               StorageClass:
                 type: string
-    Error:
-      type: object
-      xml:
-        name: Error
-      properties:
-        Code:
-          type: string
-        Message:
-          type: string
-        Resource:
-          type: string
-        RequestId:
-          type: string
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Access denied
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    bucket:
+      name: bucket
+      in: path
+      required: true
+      description: Name of the bucket
+      schema:
+        type: string
+    key:
+      name: key
+      in: path
+      required: true
+      description: Object key (file path within the bucket)
+      schema:
+        type: string
   securitySchemes:
-    BearerAuth:
-      type: http
-      scheme: bearer
-      description: Per-bucket Bearer token for authentication
+    AWS4Auth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: AWS Signature Version 4 (AWS4-HMAC-SHA256) with Filebase access key and secret key. Use endpoint s3.filebase.io and region us-east-1.
 externalDocs:
-  description: Filebase IPFS Pinning Service API Documentation
-  url: https://filebase.com/docs/ipfs/pinning-service-api
+  description: Filebase S3-Compatible API Documentation
+  url: https://filebase.com/docs/

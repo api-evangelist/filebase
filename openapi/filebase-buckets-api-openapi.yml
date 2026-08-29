@@ -1,21 +1,27 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Filebase IPFS Pinning Service Buckets API
-  description: The Filebase IPFS Pinning Service API implements the vendor-neutral IPFS Pinning Service specification. Per-bucket Bearer tokens authenticate requests to list, add, retrieve, replace, and delete pinned objects by CID. Supports metadata tagging and filtering by CID, name, status, and timestamps. Compatible with IPFS Desktop, the IPFS CLI, and any third-party tool supporting the pinning service standard. Rate limit is 100 requests per second.
-  version: '1.0'
+  title: Filebase Buckets API
   contact:
     name: Filebase Support
     url: https://filebase.com/
     email: support@filebase.com
-  termsOfService: https://filebase.com/terms/
   license:
     name: Proprietary
     url: https://filebase.com/terms/
+  termsOfService: https://filebase.com/terms/
+  version: '1.0'
+  description: 'Operations tagged Buckets across 2 of this provider''s published API definitions: filebase-platform-api-openapi.yml, filebase-s3-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
-- url: https://api.filebase.io/v1/ipfs
-  description: Filebase IPFS Pinning Service API
-security:
-- BearerAuth: []
+- url: https://api.filebase.io
+  description: Filebase Platform API
+- url: https://s3.filebase.io
+  description: Filebase S3-Compatible Endpoint
+- url: https://{bucket}.s3.filebase.io
+  description: Filebase S3 Virtual-Hosted-Style Endpoint
+  variables:
+    bucket:
+      default: my-bucket
+      description: Bucket name
 tags:
 - name: Buckets
   description: Per-bucket storage consumption
@@ -38,6 +44,11 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '429':
           $ref: '#/components/responses/TooManyRequests'
+      security:
+      - BearerAuth: []
+    servers:
+    - url: https://api.filebase.io
+      description: Filebase Platform API
   /v1/buckets/{bucketName}/usage:
     get:
       operationId: getBucketUsage
@@ -65,6 +76,11 @@ paths:
           $ref: '#/components/responses/NotFound'
         '429':
           $ref: '#/components/responses/TooManyRequests'
+      security:
+      - BearerAuth: []
+    servers:
+    - url: https://api.filebase.io
+      description: Filebase Platform API
   /:
     get:
       operationId: listBuckets
@@ -81,6 +97,17 @@ paths:
                 $ref: '#/components/schemas/ListAllMyBucketsResult'
         '403':
           $ref: '#/components/responses/Forbidden'
+      security:
+      - AWS4Auth: []
+    servers:
+    - url: https://s3.filebase.io
+      description: Filebase S3-Compatible Endpoint
+    - url: https://{bucket}.s3.filebase.io
+      description: Filebase S3 Virtual-Hosted-Style Endpoint
+      variables:
+        bucket:
+          default: my-bucket
+          description: Bucket name
   /{bucket}:
     parameters:
     - $ref: '#/components/parameters/bucket'
@@ -99,6 +126,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '409':
           $ref: '#/components/responses/Conflict'
+      security:
+      - AWS4Auth: []
     delete:
       operationId: deleteBucket
       summary: Delete a bucket
@@ -114,6 +143,8 @@ paths:
           $ref: '#/components/responses/NotFound_2'
         '409':
           $ref: '#/components/responses/Conflict'
+      security:
+      - AWS4Auth: []
     head:
       operationId: headBucket
       summary: Check bucket existence and access
@@ -127,38 +158,28 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound_2'
+      security:
+      - AWS4Auth: []
+    servers:
+    - url: https://s3.filebase.io
+      description: Filebase S3-Compatible Endpoint
+    - url: https://{bucket}.s3.filebase.io
+      description: Filebase S3 Virtual-Hosted-Style Endpoint
+      variables:
+        bucket:
+          default: my-bucket
+          description: Bucket name
 components:
-  parameters:
-    bucket:
-      name: bucket
-      in: path
-      required: true
-      description: Name of the bucket
-      schema:
-        type: string
   schemas:
-    ListAllMyBucketsResult:
+    Error:
       type: object
-      xml:
-        name: ListAllMyBucketsResult
       properties:
-        Owner:
-          type: object
-          properties:
-            ID:
-              type: string
-            DisplayName:
-              type: string
-        Buckets:
-          type: array
-          items:
-            type: object
-            properties:
-              Name:
-                type: string
-              CreationDate:
-                type: string
-                format: date-time
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
     BucketListResponse:
       type: object
       properties:
@@ -200,24 +221,31 @@ components:
           type: string
         RequestId:
           type: string
-    Error:
+    ListAllMyBucketsResult:
       type: object
+      xml:
+        name: ListAllMyBucketsResult
       properties:
-        code:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
+        Owner:
+          type: object
+          properties:
+            ID:
+              type: string
+            DisplayName:
+              type: string
+        Buckets:
+          type: array
+          items:
+            type: object
+            properties:
+              Name:
+                type: string
+              CreationDate:
+                type: string
+                format: date-time
   responses:
-    BadRequest:
-      description: Bad request
-      content:
-        application/xml:
-          schema:
-            $ref: '#/components/schemas/Error_2'
-    TooManyRequests:
-      description: Rate limit exceeded (500 req/s per account)
+    NotFound:
+      description: Resource not found
       content:
         application/json:
           schema:
@@ -228,20 +256,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Conflict:
-      description: Conflict (bucket already exists or not empty)
-      content:
-        application/xml:
-          schema:
-            $ref: '#/components/schemas/Error_2'
-    NotFound:
-      description: Resource not found
+    TooManyRequests:
+      description: Rate limit exceeded (500 req/s per account)
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: Access denied
+    Conflict:
+      description: Conflict (bucket already exists or not empty)
       content:
         application/xml:
           schema:
@@ -252,11 +274,36 @@ components:
         application/xml:
           schema:
             $ref: '#/components/schemas/Error_2'
+    BadRequest:
+      description: Bad request
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Error_2'
+    Forbidden:
+      description: Access denied
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Error_2'
+  parameters:
+    bucket:
+      name: bucket
+      in: path
+      required: true
+      description: Name of the bucket
+      schema:
+        type: string
   securitySchemes:
     BearerAuth:
       type: http
       scheme: bearer
-      description: Per-bucket Bearer token for authentication
-externalDocs:
-  description: Filebase IPFS Pinning Service API Documentation
-  url: https://filebase.com/docs/ipfs/pinning-service-api
+      description: HTTP Basic authentication encoded as base64(accessKey:secretKey) passed as a Bearer token in the Authorization header.
+    AWS4Auth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: AWS Signature Version 4 (AWS4-HMAC-SHA256) with Filebase access key and secret key. Use endpoint s3.filebase.io and region us-east-1.
+x-refined-from:
+- filebase-platform-api-openapi.yml
+- filebase-s3-api-openapi.yml

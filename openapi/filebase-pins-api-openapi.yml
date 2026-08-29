@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Filebase IPFS Pinning Service Buckets Pins API
+  title: Filebase IPFS Pinning Service Pins API
   description: The Filebase IPFS Pinning Service API implements the vendor-neutral IPFS Pinning Service specification. Per-bucket Bearer tokens authenticate requests to list, add, retrieve, replace, and delete pinned objects by CID. Supports metadata tagging and filtering by CID, name, status, and timestamps. Compatible with IPFS Desktop, the IPFS CLI, and any third-party tool supporting the pinning service standard. Rate limit is 100 requests per second.
   version: '1.0'
   contact:
@@ -220,7 +220,80 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  responses:
+    Conflict:
+      description: Conflict (409); requested ID already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    NotFound:
+      description: The specified resource was not found (404)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    BadRequest:
+      description: Bad request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    Unauthorized:
+      description: Unauthorized (401); access token is missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    TooManyRequests:
+      description: Rate limit exceeded (100 req/s)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+  parameters:
+    requestId:
+      name: requestId
+      in: path
+      required: true
+      description: Unique ID for a pin request
+      schema:
+        type: string
   schemas:
+    Pin:
+      type: object
+      required:
+      - cid
+      properties:
+        cid:
+          type: string
+          description: CID to be pinned recursively
+          example: QmCIDHash...
+        name:
+          type: string
+          description: Optional name for pinned data
+          maxLength: 255
+          example: my-file.jpg
+        origins:
+          type: array
+          description: Optional list of multiaddrs known to provide the data
+          items:
+            type: string
+          uniqueItems: true
+          maxItems: 20
+        meta:
+          type: object
+          description: Optional metadata for pin object
+          additionalProperties:
+            type: string
+          minProperties: 0
+          maxProperties: 1000
     Failure:
       type: object
       required:
@@ -284,34 +357,6 @@ components:
       - pinned
       - failed
       description: Status of a pin object
-    Pin:
-      type: object
-      required:
-      - cid
-      properties:
-        cid:
-          type: string
-          description: CID to be pinned recursively
-          example: QmCIDHash...
-        name:
-          type: string
-          description: Optional name for pinned data
-          maxLength: 255
-          example: my-file.jpg
-        origins:
-          type: array
-          description: Optional list of multiaddrs known to provide the data
-          items:
-            type: string
-          uniqueItems: true
-          maxItems: 20
-        meta:
-          type: object
-          description: Optional metadata for pin object
-          additionalProperties:
-            type: string
-          minProperties: 0
-          maxProperties: 1000
     PinResults:
       type: object
       required:
@@ -331,51 +376,6 @@ components:
           uniqueItems: true
           minItems: 0
           maxItems: 1000
-  responses:
-    Unauthorized:
-      description: Unauthorized (401); access token is missing or invalid
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-    TooManyRequests:
-      description: Rate limit exceeded (100 req/s)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-    BadRequest:
-      description: Bad request (400)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-    NotFound:
-      description: The specified resource was not found (404)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-    Conflict:
-      description: Conflict (409); requested ID already exists
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-    InternalServerError:
-      description: Internal Server Error (500)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-  parameters:
-    requestId:
-      name: requestId
-      in: path
-      required: true
-      description: Unique ID for a pin request
-      schema:
-        type: string
   securitySchemes:
     BearerAuth:
       type: http
