@@ -43,7 +43,7 @@ specificationVersion: '0.23'
 tags:
   - Object Storage
   - IPFS
-  - S3-Compatible
+  - S3 Compatible
   - Decentralized Storage
   - Pinning
   - Web3
