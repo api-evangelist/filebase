@@ -220,52 +220,26 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    Conflict:
-      description: Conflict (409); requested ID already exists
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-    NotFound:
-      description: The specified resource was not found (404)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-    BadRequest:
-      description: Bad request (400)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-    Unauthorized:
-      description: Unauthorized (401); access token is missing or invalid
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-    InternalServerError:
-      description: Internal Server Error (500)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-    TooManyRequests:
-      description: Rate limit exceeded (100 req/s)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-  parameters:
-    requestId:
-      name: requestId
-      in: path
-      required: true
-      description: Unique ID for a pin request
-      schema:
-        type: string
   schemas:
+    PinResults:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          description: Total number of pin objects that exist for passed query filters
+          minimum: 0
+          example: 1
+        results:
+          type: array
+          description: Paginated results
+          items:
+            $ref: '#/components/schemas/PinStatus'
+          uniqueItems: true
+          minItems: 0
+          maxItems: 1000
     Pin:
       type: object
       required:
@@ -294,24 +268,14 @@ components:
             type: string
           minProperties: 0
           maxProperties: 1000
-    Failure:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          type: object
-          required:
-          - reason
-          properties:
-            reason:
-              type: string
-              description: Mandatory string identifying the type of error
-              example: ERROR_CODE_FOR_MACHINES
-            details:
-              type: string
-              description: Optional detailed error message
-              example: Optional explanation for humans
+    Status:
+      type: string
+      enum:
+      - queued
+      - pinning
+      - pinned
+      - failed
+      description: Status of a pin object
     PinStatus:
       type: object
       required:
@@ -349,33 +313,69 @@ components:
             type: string
           minProperties: 0
           maxProperties: 1000
-    Status:
-      type: string
-      enum:
-      - queued
-      - pinning
-      - pinned
-      - failed
-      description: Status of a pin object
-    PinResults:
+    Failure:
       type: object
       required:
-      - count
-      - results
+      - error
       properties:
-        count:
-          type: integer
-          description: Total number of pin objects that exist for passed query filters
-          minimum: 0
-          example: 1
-        results:
-          type: array
-          description: Paginated results
-          items:
-            $ref: '#/components/schemas/PinStatus'
-          uniqueItems: true
-          minItems: 0
-          maxItems: 1000
+        error:
+          type: object
+          required:
+          - reason
+          properties:
+            reason:
+              type: string
+              description: Mandatory string identifying the type of error
+              example: ERROR_CODE_FOR_MACHINES
+            details:
+              type: string
+              description: Optional detailed error message
+              example: Optional explanation for humans
+  responses:
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    Conflict:
+      description: Conflict (409); requested ID already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    Unauthorized:
+      description: Unauthorized (401); access token is missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    BadRequest:
+      description: Bad request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    NotFound:
+      description: The specified resource was not found (404)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    TooManyRequests:
+      description: Rate limit exceeded (100 req/s)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+  parameters:
+    requestId:
+      name: requestId
+      in: path
+      required: true
+      description: Unique ID for a pin request
+      schema:
+        type: string
   securitySchemes:
     BearerAuth:
       type: http

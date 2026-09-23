@@ -78,6 +78,19 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized; Bearer token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     Error:
       type: object
@@ -91,6 +104,13 @@ components:
         Type:
           type: string
           description: Error type
+    KeyListResponse:
+      type: object
+      properties:
+        Keys:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyResponse'
     KeyResponse:
       type: object
       properties:
@@ -100,26 +120,6 @@ components:
         Name:
           type: string
           description: Key name
-    KeyListResponse:
-      type: object
-      properties:
-        Keys:
-          type: array
-          items:
-            $ref: '#/components/schemas/KeyResponse'
-  responses:
-    Unauthorized:
-      description: Unauthorized; Bearer token missing or invalid
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     BearerAuth:
       type: http

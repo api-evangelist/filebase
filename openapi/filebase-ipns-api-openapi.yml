@@ -100,6 +100,12 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    NameResolveResponse:
+      type: object
+      properties:
+        Path:
+          type: string
+          description: Resolved IPFS path
     Error:
       type: object
       properties:
@@ -112,12 +118,6 @@ components:
         Type:
           type: string
           description: Error type
-    NameResolveResponse:
-      type: object
-      properties:
-        Path:
-          type: string
-          description: Resolved IPFS path
     NamePublishResponse:
       type: object
       properties:
@@ -128,14 +128,14 @@ components:
           type: string
           description: Resolved IPFS path
   responses:
-    Unauthorized:
-      description: Unauthorized; Bearer token missing or invalid
+    InternalServerError:
+      description: Internal Server Error
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal Server Error
+    Unauthorized:
+      description: Unauthorized; Bearer token missing or invalid
       content:
         application/json:
           schema:

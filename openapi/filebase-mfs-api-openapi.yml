@@ -150,6 +150,18 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        Message:
+          type: string
+          description: Error message
+        Code:
+          type: integer
+          description: Error code
+        Type:
+          type: string
+          description: Error type
     MfsLsResponse:
       type: object
       properties:
@@ -167,18 +179,6 @@ components:
                 format: int64
               Hash:
                 type: string
-    Error:
-      type: object
-      properties:
-        Message:
-          type: string
-          description: Error message
-        Code:
-          type: integer
-          description: Error code
-        Type:
-          type: string
-          description: Error type
   responses:
     Unauthorized:
       description: Unauthorized; Bearer token missing or invalid

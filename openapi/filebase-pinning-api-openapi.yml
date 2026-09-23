@@ -124,19 +124,20 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized; Bearer token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    Error:
-      type: object
-      properties:
-        Message:
-          type: string
-          description: Error message
-        Code:
-          type: integer
-          description: Error code
-        Type:
-          type: string
-          description: Error type
     PinLsResponse:
       type: object
       properties:
@@ -151,14 +152,18 @@ components:
                 - direct
                 - indirect
                 - recursive
-    PinRmResponse:
+    Error:
       type: object
       properties:
-        Pins:
-          type: array
-          items:
-            type: string
-          description: List of unpinned CIDs
+        Message:
+          type: string
+          description: Error message
+        Code:
+          type: integer
+          description: Error code
+        Type:
+          type: string
+          description: Error type
     PinAddResponse:
       type: object
       properties:
@@ -167,19 +172,14 @@ components:
           items:
             type: string
           description: List of pinned CIDs
-  responses:
-    Unauthorized:
-      description: Unauthorized; Bearer token missing or invalid
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    PinRmResponse:
+      type: object
+      properties:
+        Pins:
+          type: array
+          items:
+            type: string
+          description: List of unpinned CIDs
   securitySchemes:
     BearerAuth:
       type: http
