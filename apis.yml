@@ -49,6 +49,7 @@ tags:
   - Web3
   - Cloud Storage
   - Blockchain
+  - Storage
 tags_raw:
   - Object Storage
   - IPFS
@@ -58,6 +59,7 @@ tags_raw:
   - Web3
   - Cloud Storage
   - Blockchain
+  - Storage
 apis:
 - aid: filebase:filebase-s3-api
   name: Filebase S3-Compatible API

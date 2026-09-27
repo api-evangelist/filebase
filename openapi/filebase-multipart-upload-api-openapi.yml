@@ -46,13 +46,6 @@ paths:
         '403':
           $ref: '#/components/responses/Forbidden'
 components:
-  responses:
-    Forbidden:
-      description: Access denied
-      content:
-        application/xml:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
     Error:
       type: object
@@ -79,13 +72,6 @@ components:
         UploadId:
           type: string
   parameters:
-    bucket:
-      name: bucket
-      in: path
-      required: true
-      description: Name of the bucket
-      schema:
-        type: string
     key:
       name: key
       in: path
@@ -93,6 +79,20 @@ components:
       description: Object key (file path within the bucket)
       schema:
         type: string
+    bucket:
+      name: bucket
+      in: path
+      required: true
+      description: Name of the bucket
+      schema:
+        type: string
+  responses:
+    Forbidden:
+      description: Access denied
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     AWS4Auth:
       type: apiKey

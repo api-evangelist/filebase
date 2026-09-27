@@ -221,16 +221,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    CopyObjectResult:
-      type: object
-      xml:
-        name: CopyObjectResult
-      properties:
-        LastModified:
-          type: string
-          format: date-time
-        ETag:
-          type: string
     Error:
       type: object
       xml:
@@ -278,27 +268,17 @@ components:
                 format: int64
               StorageClass:
                 type: string
-  responses:
-    NotFound:
-      description: Resource not found
-      content:
-        application/xml:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: Access denied
-      content:
-        application/xml:
-          schema:
-            $ref: '#/components/schemas/Error'
+    CopyObjectResult:
+      type: object
+      xml:
+        name: CopyObjectResult
+      properties:
+        LastModified:
+          type: string
+          format: date-time
+        ETag:
+          type: string
   parameters:
-    bucket:
-      name: bucket
-      in: path
-      required: true
-      description: Name of the bucket
-      schema:
-        type: string
     key:
       name: key
       in: path
@@ -306,6 +286,26 @@ components:
       description: Object key (file path within the bucket)
       schema:
         type: string
+    bucket:
+      name: bucket
+      in: path
+      required: true
+      description: Name of the bucket
+      schema:
+        type: string
+  responses:
+    Forbidden:
+      description: Access denied
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     AWS4Auth:
       type: apiKey

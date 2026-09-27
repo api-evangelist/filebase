@@ -180,14 +180,14 @@ components:
               Hash:
                 type: string
   responses:
-    Unauthorized:
-      description: Unauthorized; Bearer token missing or invalid
+    InternalServerError:
+      description: Internal Server Error
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal Server Error
+    Unauthorized:
+      description: Unauthorized; Bearer token missing or invalid
       content:
         application/json:
           schema:
