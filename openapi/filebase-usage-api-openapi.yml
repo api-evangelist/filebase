@@ -58,29 +58,6 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-    UsageResponse:
-      type: object
-      properties:
-        storage_bytes:
-          type: integer
-          format: int64
-          description: Total storage used in bytes
-        object_count:
-          type: integer
-          format: int64
-          description: Total number of objects stored
-        bucket_count:
-          type: integer
-          description: Total number of buckets
     BandwidthResponse:
       type: object
       properties:
@@ -96,15 +73,38 @@ components:
           type: string
           format: date-time
           description: End of the measurement period
+    UsageResponse:
+      type: object
+      properties:
+        storage_bytes:
+          type: integer
+          format: int64
+          description: Total storage used in bytes
+        object_count:
+          type: integer
+          format: int64
+          description: Total number of objects stored
+        bucket_count:
+          type: integer
+          description: Total number of buckets
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
   responses:
-    TooManyRequests:
-      description: Rate limit exceeded (500 req/s per account)
+    Unauthorized:
+      description: Authentication failed
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication failed
+    TooManyRequests:
+      description: Rate limit exceeded (500 req/s per account)
       content:
         application/json:
           schema:

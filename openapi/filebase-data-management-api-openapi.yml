@@ -119,18 +119,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        Message:
-          type: string
-          description: Error message
-        Code:
-          type: integer
-          description: Error code
-        Type:
-          type: string
-          description: Error type
     AddResponse:
       type: object
       properties:
@@ -143,6 +131,18 @@ components:
         Size:
           type: string
           description: Size of the content in bytes
+    Error:
+      type: object
+      properties:
+        Message:
+          type: string
+          description: Error message
+        Code:
+          type: integer
+          description: Error code
+        Type:
+          type: string
+          description: Error type
     CarImportResponse:
       type: object
       properties:

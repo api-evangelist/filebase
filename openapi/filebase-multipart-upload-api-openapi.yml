@@ -72,18 +72,18 @@ components:
         UploadId:
           type: string
   parameters:
-    key:
-      name: key
-      in: path
-      required: true
-      description: Object key (file path within the bucket)
-      schema:
-        type: string
     bucket:
       name: bucket
       in: path
       required: true
       description: Name of the bucket
+      schema:
+        type: string
+    key:
+      name: key
+      in: path
+      required: true
+      description: Object key (file path within the bucket)
       schema:
         type: string
   responses:

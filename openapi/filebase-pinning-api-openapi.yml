@@ -125,6 +125,14 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    PinRmResponse:
+      type: object
+      properties:
+        Pins:
+          type: array
+          items:
+            type: string
+          description: List of unpinned CIDs
     Error:
       type: object
       properties:
@@ -137,14 +145,6 @@ components:
         Type:
           type: string
           description: Error type
-    PinAddResponse:
-      type: object
-      properties:
-        Pins:
-          type: array
-          items:
-            type: string
-          description: List of pinned CIDs
     PinLsResponse:
       type: object
       properties:
@@ -159,14 +159,14 @@ components:
                 - direct
                 - indirect
                 - recursive
-    PinRmResponse:
+    PinAddResponse:
       type: object
       properties:
         Pins:
           type: array
           items:
             type: string
-          description: List of unpinned CIDs
+          description: List of pinned CIDs
   responses:
     InternalServerError:
       description: Internal Server Error

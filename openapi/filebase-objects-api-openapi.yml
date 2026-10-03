@@ -221,19 +221,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    Error:
-      type: object
-      xml:
-        name: Error
-      properties:
-        Code:
-          type: string
-        Message:
-          type: string
-        Resource:
-          type: string
-        RequestId:
-          type: string
     ListBucketResult:
       type: object
       xml:
@@ -268,6 +255,19 @@ components:
                 format: int64
               StorageClass:
                 type: string
+    Error:
+      type: object
+      xml:
+        name: Error
+      properties:
+        Code:
+          type: string
+        Message:
+          type: string
+        Resource:
+          type: string
+        RequestId:
+          type: string
     CopyObjectResult:
       type: object
       xml:
@@ -278,14 +278,20 @@ components:
           format: date-time
         ETag:
           type: string
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Access denied
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
-    key:
-      name: key
-      in: path
-      required: true
-      description: Object key (file path within the bucket)
-      schema:
-        type: string
     bucket:
       name: bucket
       in: path
@@ -293,19 +299,13 @@ components:
       description: Name of the bucket
       schema:
         type: string
-  responses:
-    Forbidden:
-      description: Access denied
-      content:
-        application/xml:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/xml:
-          schema:
-            $ref: '#/components/schemas/Error'
+    key:
+      name: key
+      in: path
+      required: true
+      description: Object key (file path within the bucket)
+      schema:
+        type: string
   securitySchemes:
     AWS4Auth:
       type: apiKey
