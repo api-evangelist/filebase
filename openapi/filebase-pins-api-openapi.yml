@@ -220,33 +220,17 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  parameters:
+    requestId:
+      name: requestId
+      in: path
+      required: true
+      description: Unique ID for a pin request
+      schema:
+        type: string
   responses:
-    NotFound:
-      description: The specified resource was not found (404)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-    Conflict:
-      description: Conflict (409); requested ID already exists
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-    InternalServerError:
-      description: Internal Server Error (500)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
     Unauthorized:
       description: Unauthorized (401); access token is missing or invalid
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-    TooManyRequests:
-      description: Rate limit exceeded (100 req/s)
       content:
         application/json:
           schema:
@@ -257,35 +241,50 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Failure'
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    NotFound:
+      description: The specified resource was not found (404)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    TooManyRequests:
+      description: Rate limit exceeded (100 req/s)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    Conflict:
+      description: Conflict (409); requested ID already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
   schemas:
-    Pin:
+    PinResults:
       type: object
       required:
-      - cid
+      - count
+      - results
       properties:
-        cid:
-          type: string
-          description: CID to be pinned recursively
-          example: QmCIDHash...
-        name:
-          type: string
-          description: Optional name for pinned data
-          maxLength: 255
-          example: my-file.jpg
-        origins:
+        count:
+          type: integer
+          description: Total number of pin objects that exist for passed query filters
+          minimum: 0
+          example: 1
+        results:
           type: array
-          description: Optional list of multiaddrs known to provide the data
+          description: Paginated results
           items:
-            type: string
+            $ref: '#/components/schemas/PinStatus'
           uniqueItems: true
-          maxItems: 20
-        meta:
-          type: object
-          description: Optional metadata for pin object
-          additionalProperties:
-            type: string
-          minProperties: 0
-          maxProperties: 1000
+          minItems: 0
+          maxItems: 1000
     PinStatus:
       type: object
       required:
@@ -323,6 +322,42 @@ components:
             type: string
           minProperties: 0
           maxProperties: 1000
+    Pin:
+      type: object
+      required:
+      - cid
+      properties:
+        cid:
+          type: string
+          description: CID to be pinned recursively
+          example: QmCIDHash...
+        name:
+          type: string
+          description: Optional name for pinned data
+          maxLength: 255
+          example: my-file.jpg
+        origins:
+          type: array
+          description: Optional list of multiaddrs known to provide the data
+          items:
+            type: string
+          uniqueItems: true
+          maxItems: 20
+        meta:
+          type: object
+          description: Optional metadata for pin object
+          additionalProperties:
+            type: string
+          minProperties: 0
+          maxProperties: 1000
+    Status:
+      type: string
+      enum:
+      - queued
+      - pinning
+      - pinned
+      - failed
+      description: Status of a pin object
     Failure:
       type: object
       required:
@@ -341,41 +376,6 @@ components:
               type: string
               description: Optional detailed error message
               example: Optional explanation for humans
-    PinResults:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          description: Total number of pin objects that exist for passed query filters
-          minimum: 0
-          example: 1
-        results:
-          type: array
-          description: Paginated results
-          items:
-            $ref: '#/components/schemas/PinStatus'
-          uniqueItems: true
-          minItems: 0
-          maxItems: 1000
-    Status:
-      type: string
-      enum:
-      - queued
-      - pinning
-      - pinned
-      - failed
-      description: Status of a pin object
-  parameters:
-    requestId:
-      name: requestId
-      in: path
-      required: true
-      description: Unique ID for a pin request
-      schema:
-        type: string
   securitySchemes:
     BearerAuth:
       type: http

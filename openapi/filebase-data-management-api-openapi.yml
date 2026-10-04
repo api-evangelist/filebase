@@ -119,30 +119,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    AddResponse:
-      type: object
-      properties:
-        Name:
-          type: string
-          description: Filename
-        Hash:
-          type: string
-          description: CID of the added content
-        Size:
-          type: string
-          description: Size of the content in bytes
-    Error:
-      type: object
-      properties:
-        Message:
-          type: string
-          description: Error message
-        Code:
-          type: integer
-          description: Error code
-        Type:
-          type: string
-          description: Error type
     CarImportResponse:
       type: object
       properties:
@@ -156,6 +132,30 @@ components:
                   type: string
             PinErrorMsg:
               type: string
+    Error:
+      type: object
+      properties:
+        Message:
+          type: string
+          description: Error message
+        Code:
+          type: integer
+          description: Error code
+        Type:
+          type: string
+          description: Error type
+    AddResponse:
+      type: object
+      properties:
+        Name:
+          type: string
+          description: Filename
+        Hash:
+          type: string
+          description: CID of the added content
+        Size:
+          type: string
+          description: Size of the content in bytes
   responses:
     InternalServerError:
       description: Internal Server Error

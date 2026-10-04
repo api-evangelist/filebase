@@ -172,57 +172,7 @@ paths:
           default: my-bucket
           description: Bucket name
 components:
-  responses:
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Rate limit exceeded (500 req/s per account)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound_2:
-      description: Resource not found
-      content:
-        application/xml:
-          schema:
-            $ref: '#/components/schemas/Error_2'
-    Conflict:
-      description: Conflict (bucket already exists or not empty)
-      content:
-        application/xml:
-          schema:
-            $ref: '#/components/schemas/Error_2'
-    BadRequest:
-      description: Bad request
-      content:
-        application/xml:
-          schema:
-            $ref: '#/components/schemas/Error_2'
-    Forbidden:
-      description: Access denied
-      content:
-        application/xml:
-          schema:
-            $ref: '#/components/schemas/Error_2'
   schemas:
-    BucketListResponse:
-      type: object
-      properties:
-        buckets:
-          type: array
-          items:
-            $ref: '#/components/schemas/BucketUsageResponse'
     BucketUsageResponse:
       type: object
       properties:
@@ -244,6 +194,13 @@ components:
           type: string
           format: date-time
           description: Bucket creation timestamp
+    BucketListResponse:
+      type: object
+      properties:
+        buckets:
+          type: array
+          items:
+            $ref: '#/components/schemas/BucketUsageResponse'
     Error:
       type: object
       properties:
@@ -253,19 +210,6 @@ components:
         message:
           type: string
           description: Human-readable error message
-    Error_2:
-      type: object
-      xml:
-        name: Error
-      properties:
-        Code:
-          type: string
-        Message:
-          type: string
-        Resource:
-          type: string
-        RequestId:
-          type: string
     ListAllMyBucketsResult:
       type: object
       xml:
@@ -288,6 +232,62 @@ components:
               CreationDate:
                 type: string
                 format: date-time
+    Error_2:
+      type: object
+      xml:
+        name: Error
+      properties:
+        Code:
+          type: string
+        Message:
+          type: string
+        Resource:
+          type: string
+        RequestId:
+          type: string
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded (500 req/s per account)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound_2:
+      description: Resource not found
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Error_2'
+    BadRequest:
+      description: Bad request
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Error_2'
+    Forbidden:
+      description: Access denied
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Error_2'
+    Conflict:
+      description: Conflict (bucket already exists or not empty)
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Error_2'
   parameters:
     bucket:
       name: bucket

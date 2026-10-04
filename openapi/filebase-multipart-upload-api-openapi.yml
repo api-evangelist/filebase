@@ -47,6 +47,17 @@ paths:
           $ref: '#/components/responses/Forbidden'
 components:
   schemas:
+    InitiateMultipartUploadResult:
+      type: object
+      xml:
+        name: InitiateMultipartUploadResult
+      properties:
+        Bucket:
+          type: string
+        Key:
+          type: string
+        UploadId:
+          type: string
     Error:
       type: object
       xml:
@@ -59,17 +70,6 @@ components:
         Resource:
           type: string
         RequestId:
-          type: string
-    InitiateMultipartUploadResult:
-      type: object
-      xml:
-        name: InitiateMultipartUploadResult
-      properties:
-        Bucket:
-          type: string
-        Key:
-          type: string
-        UploadId:
           type: string
   parameters:
     bucket:

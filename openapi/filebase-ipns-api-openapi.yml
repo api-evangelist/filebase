@@ -109,6 +109,12 @@ components:
         Value:
           type: string
           description: Resolved IPFS path
+    NameResolveResponse:
+      type: object
+      properties:
+        Path:
+          type: string
+          description: Resolved IPFS path
     Error:
       type: object
       properties:
@@ -121,12 +127,6 @@ components:
         Type:
           type: string
           description: Error type
-    NameResolveResponse:
-      type: object
-      properties:
-        Path:
-          type: string
-          description: Resolved IPFS path
   responses:
     InternalServerError:
       description: Internal Server Error

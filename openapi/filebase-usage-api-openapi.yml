@@ -97,14 +97,14 @@ components:
           type: string
           description: Human-readable error message
   responses:
-    Unauthorized:
-      description: Authentication failed
+    TooManyRequests:
+      description: Rate limit exceeded (500 req/s per account)
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Rate limit exceeded (500 req/s per account)
+    Unauthorized:
+      description: Authentication failed
       content:
         application/json:
           schema:

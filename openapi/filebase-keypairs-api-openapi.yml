@@ -79,6 +79,15 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    KeyResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Key ID (PeerID format)
+        Name:
+          type: string
+          description: Key name
     Error:
       type: object
       properties:
@@ -91,15 +100,6 @@ components:
         Type:
           type: string
           description: Error type
-    KeyResponse:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Key ID (PeerID format)
-        Name:
-          type: string
-          description: Key name
     KeyListResponse:
       type: object
       properties:

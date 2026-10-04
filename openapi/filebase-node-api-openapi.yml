@@ -39,19 +39,20 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized; Bearer token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    Error:
-      type: object
-      properties:
-        Message:
-          type: string
-          description: Error message
-        Code:
-          type: integer
-          description: Error code
-        Type:
-          type: string
-          description: Error type
     NodeIdResponse:
       type: object
       properties:
@@ -71,19 +72,18 @@ components:
           description: IPFS version string
         ProtocolVersion:
           type: string
-  responses:
-    InternalServerError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized; Bearer token missing or invalid
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      properties:
+        Message:
+          type: string
+          description: Error message
+        Code:
+          type: integer
+          description: Error code
+        Type:
+          type: string
+          description: Error type
   securitySchemes:
     BearerAuth:
       type: http
