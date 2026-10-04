@@ -266,6 +266,9 @@ apis:
   - type: OpenAPI
     url: openapi/filebase-usage-api-openapi.yml
 common:
+  - type: CapabilityMap
+    url: capabilities/filebase-capability-edges.yml
+    name: Filebase Business Capability Map
   - type: AgenticAccess
     url: agentic-access/filebase-agentic-access.yml
   - type: DomainSecurity
