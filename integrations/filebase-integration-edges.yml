@@ -1,0 +1,56 @@
+edges:
+- partner_name: Amazon Web Services
+  partner: amazon-web-services
+  partner_match: shape-anchor
+  channel: provider-built
+  relationship: compatible
+  direction: provider-built
+  shape: aws-s3
+  type: docs
+  degree: declared-subset
+  evidence: https://docs.filebase.com/api-documentation/s3-compatible-api
+  evidence_kind: own-docs
+  evidence_file: https://github.com/api-evangelist/filebase/blob/main/evidence/compatibility/filebase-aws-s3-1.md
+  quote: <!-- fetched 2026-10-13 from https://docs.filebase.com/api-documentation/s3-compatible-api by sweep-shape-compat.py;
+    text extracted from the provider's own page -->
+  supported_operations:
+  - AbortMultipartUpload
+  - CompleteMultipartUpload
+  - CopyObject
+  - CreateBucket
+  - CreateMultipartUpload
+  - DeleteBucket
+  - DeleteBucketCors
+  - DeleteObject
+  - GetBucketAcl
+  - GetBucketCors
+  - GetBucketLifecycleConfiguration
+  - GetBucketLocation
+  - GetBucketLogging
+  - GetBucketVersioning
+  - GetObject
+  - GetObjectAcl
+  - HeadBucket
+  - HeadObject
+  - ListBuckets
+  - ListObjects
+  - ListObjectsV2
+  - PutBucketAcl
+  - PutBucketCors
+  - PutObject
+  - UploadPart
+  unsupported_operations: []
+  supported_share: 0.373
+  structural_match:
+    file: filebase/openapi/filebase-objects-api-openapi.yml
+    ops:
+    - CopyObject
+    - DeleteObject
+    - GetObject
+    - HeadObject
+    - ListObjects
+    - PutObject
+  detected_by: sweep-shape-compat.py
+  first_seen: '2026-10-13'
+generated: '2026-10-13'
+method: searched

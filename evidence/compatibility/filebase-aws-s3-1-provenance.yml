@@ -1,0 +1,12 @@
+fetched: '2026-10-13'
+method: fetched
+source: https://docs.filebase.com/api-documentation/s3-compatible-api
+page: https://docs.filebase.com/api-documentation/s3-compatible-api
+file: filebase-aws-s3-1.md
+bytes: 5375
+sha256: 026feb1efdec8e140eb4c8c00939915e4c077219afdd9688c6fbd9a15208223a
+anchor: amazon-web-services
+shape: aws-s3
+classification: declares-compatibility
+quote: S3 compatibility matrix
+note: text extracted from the provider's own page (tags stripped), saved for evidence
