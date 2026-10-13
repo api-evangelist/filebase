@@ -6,41 +6,11 @@ edges:
   relationship: compatible
   direction: provider-built
   shape: aws-s3
-  type: docs
-  degree: declared-subset
-  evidence: https://docs.filebase.com/api-documentation/s3-compatible-api
-  evidence_kind: own-docs
-  evidence_file: https://github.com/api-evangelist/filebase/blob/main/evidence/compatibility/filebase-aws-s3-1.md
-  quote: <!-- fetched 2026-10-13 from https://docs.filebase.com/api-documentation/s3-compatible-api by sweep-shape-compat.py;
-    text extracted from the provider's own page -->
-  supported_operations:
-  - AbortMultipartUpload
-  - CompleteMultipartUpload
-  - CopyObject
-  - CreateBucket
-  - CreateMultipartUpload
-  - DeleteBucket
-  - DeleteBucketCors
-  - DeleteObject
-  - GetBucketAcl
-  - GetBucketCors
-  - GetBucketLifecycleConfiguration
-  - GetBucketLocation
-  - GetBucketLogging
-  - GetBucketVersioning
-  - GetObject
-  - GetObjectAcl
-  - HeadBucket
-  - HeadObject
-  - ListBuckets
-  - ListObjects
-  - ListObjectsV2
-  - PutBucketAcl
-  - PutBucketCors
-  - PutObject
-  - UploadPart
-  unsupported_operations: []
-  supported_share: 0.373
+  type: contract
+  degree: declared-unqualified
+  evidence: https://github.com/api-evangelist/filebase/blob/main/openapi/filebase-buckets-api-openapi.yml#L18
+  evidence_kind: own-contract
+  quote: 'description: Filebase S3-Compatible Endpoint'
   structural_match:
     file: filebase/openapi/filebase-objects-api-openapi.yml
     ops:
