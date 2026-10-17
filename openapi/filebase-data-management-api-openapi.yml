@@ -132,18 +132,6 @@ components:
                   type: string
             PinErrorMsg:
               type: string
-    Error:
-      type: object
-      properties:
-        Message:
-          type: string
-          description: Error message
-        Code:
-          type: integer
-          description: Error code
-        Type:
-          type: string
-          description: Error type
     AddResponse:
       type: object
       properties:
@@ -156,15 +144,27 @@ components:
         Size:
           type: string
           description: Size of the content in bytes
+    Error:
+      type: object
+      properties:
+        Message:
+          type: string
+          description: Error message
+        Code:
+          type: integer
+          description: Error code
+        Type:
+          type: string
+          description: Error type
   responses:
-    InternalServerError:
-      description: Internal Server Error
+    Unauthorized:
+      description: Unauthorized; Bearer token missing or invalid
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized; Bearer token missing or invalid
+    InternalServerError:
+      description: Internal Server Error
       content:
         application/json:
           schema:

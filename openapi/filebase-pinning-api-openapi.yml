@@ -125,6 +125,20 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    PinLsResponse:
+      type: object
+      properties:
+        Keys:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              Type:
+                type: string
+                enum:
+                - direct
+                - indirect
+                - recursive
     PinRmResponse:
       type: object
       properties:
@@ -153,29 +167,15 @@ components:
         Type:
           type: string
           description: Error type
-    PinLsResponse:
-      type: object
-      properties:
-        Keys:
-          type: object
-          additionalProperties:
-            type: object
-            properties:
-              Type:
-                type: string
-                enum:
-                - direct
-                - indirect
-                - recursive
   responses:
-    InternalServerError:
-      description: Internal Server Error
+    Unauthorized:
+      description: Unauthorized; Bearer token missing or invalid
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized; Bearer token missing or invalid
+    InternalServerError:
+      description: Internal Server Error
       content:
         application/json:
           schema:

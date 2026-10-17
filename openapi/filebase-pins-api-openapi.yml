@@ -220,52 +220,61 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  parameters:
-    requestId:
-      name: requestId
-      in: path
-      required: true
-      description: Unique ID for a pin request
-      schema:
-        type: string
-  responses:
-    Unauthorized:
-      description: Unauthorized (401); access token is missing or invalid
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-    BadRequest:
-      description: Bad request (400)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-    InternalServerError:
-      description: Internal Server Error (500)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-    NotFound:
-      description: The specified resource was not found (404)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-    TooManyRequests:
-      description: Rate limit exceeded (100 req/s)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-    Conflict:
-      description: Conflict (409); requested ID already exists
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
   schemas:
+    Failure:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - reason
+          properties:
+            reason:
+              type: string
+              description: Mandatory string identifying the type of error
+              example: ERROR_CODE_FOR_MACHINES
+            details:
+              type: string
+              description: Optional detailed error message
+              example: Optional explanation for humans
+    Status:
+      type: string
+      enum:
+      - queued
+      - pinning
+      - pinned
+      - failed
+      description: Status of a pin object
+    Pin:
+      type: object
+      required:
+      - cid
+      properties:
+        cid:
+          type: string
+          description: CID to be pinned recursively
+          example: QmCIDHash...
+        name:
+          type: string
+          description: Optional name for pinned data
+          maxLength: 255
+          example: my-file.jpg
+        origins:
+          type: array
+          description: Optional list of multiaddrs known to provide the data
+          items:
+            type: string
+          uniqueItems: true
+          maxItems: 20
+        meta:
+          type: object
+          description: Optional metadata for pin object
+          additionalProperties:
+            type: string
+          minProperties: 0
+          maxProperties: 1000
     PinResults:
       type: object
       required:
@@ -322,60 +331,51 @@ components:
             type: string
           minProperties: 0
           maxProperties: 1000
-    Pin:
-      type: object
-      required:
-      - cid
-      properties:
-        cid:
-          type: string
-          description: CID to be pinned recursively
-          example: QmCIDHash...
-        name:
-          type: string
-          description: Optional name for pinned data
-          maxLength: 255
-          example: my-file.jpg
-        origins:
-          type: array
-          description: Optional list of multiaddrs known to provide the data
-          items:
-            type: string
-          uniqueItems: true
-          maxItems: 20
-        meta:
-          type: object
-          description: Optional metadata for pin object
-          additionalProperties:
-            type: string
-          minProperties: 0
-          maxProperties: 1000
-    Status:
-      type: string
-      enum:
-      - queued
-      - pinning
-      - pinned
-      - failed
-      description: Status of a pin object
-    Failure:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          type: object
-          required:
-          - reason
-          properties:
-            reason:
-              type: string
-              description: Mandatory string identifying the type of error
-              example: ERROR_CODE_FOR_MACHINES
-            details:
-              type: string
-              description: Optional detailed error message
-              example: Optional explanation for humans
+  parameters:
+    requestId:
+      name: requestId
+      in: path
+      required: true
+      description: Unique ID for a pin request
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Unauthorized (401); access token is missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    NotFound:
+      description: The specified resource was not found (404)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    TooManyRequests:
+      description: Rate limit exceeded (100 req/s)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    Conflict:
+      description: Conflict (409); requested ID already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    BadRequest:
+      description: Bad request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
   securitySchemes:
     BearerAuth:
       type: http
