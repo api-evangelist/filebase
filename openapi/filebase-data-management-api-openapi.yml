@@ -118,7 +118,32 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized; Bearer token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
+    AddResponse:
+      type: object
+      properties:
+        Name:
+          type: string
+          description: Filename
+        Hash:
+          type: string
+          description: CID of the added content
+        Size:
+          type: string
+          description: Size of the content in bytes
     CarImportResponse:
       type: object
       properties:
@@ -132,18 +157,6 @@ components:
                   type: string
             PinErrorMsg:
               type: string
-    AddResponse:
-      type: object
-      properties:
-        Name:
-          type: string
-          description: Filename
-        Hash:
-          type: string
-          description: CID of the added content
-        Size:
-          type: string
-          description: Size of the content in bytes
     Error:
       type: object
       properties:
@@ -156,19 +169,6 @@ components:
         Type:
           type: string
           description: Error type
-  responses:
-    Unauthorized:
-      description: Unauthorized; Bearer token missing or invalid
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     BearerAuth:
       type: http

@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: Filebase S3-Compatible Multipart Upload API
-  description: The Filebase S3-Compatible API provides standard AWS S3 protocol support for bucket and object management.
+  description: The Filebase S3-Compatible API provides standard AWS S3 protocol support for bucket and object management. Developers can use any existing S3 SDK, CLI tool, or framework with endpoint s3.filebase.io and region us-east-1. Authentication uses AWS Signature Version 4 (AWS4-HMAC-SHA256) with Filebase access key and secret key pairs. Supported operations include bucket creation and deletion, object upload (including multipart), copy, delete, and listing. Objects stored in IPFS-backed buckets are automatically pinned with 3x geo-redundant replication.
   version: '2006-03-01'
   contact:
     name: Filebase Support
@@ -61,6 +61,13 @@ components:
       description: Name of the bucket
       schema:
         type: string
+  responses:
+    Forbidden:
+      description: Access denied
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     InitiateMultipartUploadResult:
       type: object
@@ -86,13 +93,6 @@ components:
           type: string
         RequestId:
           type: string
-  responses:
-    Forbidden:
-      description: Access denied
-      content:
-        application/xml:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     AWS4Auth:
       type: apiKey
