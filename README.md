@@ -64,52 +64,177 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Filebase is an S3-compatible object storage and IPFS pinning platform that combines familiar cloud storage APIs with decentralized, blockchain-backed infrastructure. Developers can store, manage, and pin files to IPFS using standard S3 tooling, a dedicated IPFS Pinning Service API, and an IPFS RPC API — all without changing existing workflows. Filebase delivers geo-redundant 3x replication, free egress for object storage, a global CDN, and predictable pricing.
+Filebase is an S3-compatible object storage and IPFS pinning platform that combines familiar cloud storage APIs with decentralized, blockchain-backed infrastructure. Developers can store, manage, and pin files to IPFS using standard S3 tooling, a dedicated IPFS Pinning Service API, and an IPFS RPC API — all without changing existing workflows. Filebase delivers geo-redundant 3x replication, free egress for object storage, a global CDN, and predictable pricing, making it straightforward to build Web3 applications on top of decentralized networks through a Web2-style developer experience.
 
-**Website:** https://filebase.com/  
-**Documentation:** https://filebase.com/docs/  
-**GitHub:** https://github.com/filebase  
-**LinkedIn:** https://www.linkedin.com/company/filebase  
-**X:** https://twitter.com/Filebase  
-**Blog:** https://filebase.com/blog/  
-**Pricing:** https://filebase.com/pricing/  
-**Status:** https://status.filebase.com/  
+**Areas:** Object Storage · IPFS · S3 Compatible · Decentralized Storage · Pinning · Web3 · Cloud Storage · Blockchain · Storage
 
-## APIs
+## Filebase on APIs.io
 
-| API | Base URL | Description |
-|-----|----------|-------------|
-| S3-Compatible API | https://s3.filebase.io | Standard S3 protocol for bucket and object management |
-| Platform API | https://api.filebase.io | Account-level usage metrics and management |
-| IPFS Pinning Service API | https://api.filebase.io/v1/ipfs | Vendor-neutral IPFS pinning standard |
-| IPFS RPC API | https://rpc.filebase.io | Core IPFS daemon operations |
+Everything profiled for Filebase is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/filebase/](https://apis.io/providers/filebase/)** — or go straight to one of the APIs or properties below.
 
-## Authentication
+### APIs (15)
 
-- **S3 API:** AWS Signature Version 4 (AWS4-HMAC-SHA256) with access key / secret key pairs
-- **Platform API:** HTTP Basic / Bearer token using base64-encoded `<access-key>:<secret-key>`
-- **IPFS Pinning Service API:** Per-bucket Bearer token
-- **IPFS RPC API:** Bucket-specific Bearer token
+- [Filebase S3-Compatible API](https://apis.io/apis/filebase/filebase-s3-api/) — The Filebase S3-Compatible API provides standard AWS S3 protocol support for bucket and object management. Developers can use any existing S3 SDK, CLI tool,…
+- [Filebase Platform API](https://apis.io/apis/filebase/filebase-platform-api/) — The Filebase Platform API provides account-level operations that complement the S3 API. Using HTTP Basic authentication with base64-encoded access key and…
+- [Filebase IPFS Pinning Service API](https://apis.io/apis/filebase/filebase-ipfs-pinning-service-api/) — The Filebase IPFS Pinning Service API implements the vendor-neutral IPFS Pinning Service specification. Per-bucket Bearer tokens authenticate requests to…
+- [Filebase IPFS RPC API](https://apis.io/apis/filebase/filebase-ipfs-rpc-api/) — The Filebase IPFS RPC API exposes core IPFS daemon functionality through an HTTP interface. Bucket-specific Bearer tokens authenticate all POST requests to…
+- [Filebase Buckets API](https://apis.io/apis/filebase/filebase-buckets-api/) — Per-bucket storage consumption
+- [Filebase Data Management API](https://apis.io/apis/filebase/filebase-data-management-api/) — Add, retrieve, and import IPFS data
+- [Filebase IPNS API](https://apis.io/apis/filebase/filebase-ipns-api/) — IPNS name publishing and resolution
+- [Filebase Keypairs API](https://apis.io/apis/filebase/filebase-keypairs-api/) — IPNS keypair management
+- [Filebase MFS API](https://apis.io/apis/filebase/filebase-mfs-api/) — Mutable File System operations
+- [Filebase Multipart Upload API](https://apis.io/apis/filebase/filebase-multipart-upload-api/) — Large file multipart upload operations
+- [Filebase Node API](https://apis.io/apis/filebase/filebase-node-api/) — IPFS node information
+- [Filebase Objects API](https://apis.io/apis/filebase/filebase-objects-api/) — Object upload, download, copy, delete, and metadata
+- [Filebase Pinning API](https://apis.io/apis/filebase/filebase-pinning-api/) — Pin and unpin IPFS objects
+- [Filebase Pins API](https://apis.io/apis/filebase/filebase-pins-api/) — IPFS pin management operations
+- [Filebase Usage API](https://apis.io/apis/filebase/filebase-usage-api/) — Account-level usage and bandwidth metrics
 
-## Rate Limits
+### Published properties
 
-| API | Limit |
-|-----|-------|
-| S3-Compatible API | 500 req/s per account |
-| Platform API | 500 req/s per account |
-| IPFS Pinning Service API | 100 req/s per account |
-| IPFS RPC API | 100 req/s per bucket |
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## Pricing
+#### Agentic access (1)
 
-| Plan | Price | Storage | IPFS Egress |
-|------|-------|---------|-------------|
-| Free | $0/mo | 5 GB | 1 GB |
-| Pro | $7.50/mo | 500 GB | 250 GB |
-| Enterprise | Custom | Custom | Custom |
+Which operations an agent can call, which act, and which need a human in the loop.
 
-Object storage egress is free on all plans.
+- [Filebase Agentic Access](https://apis.io/agentic-access/filebase/filebase-agentic-access/)
 
----
+#### JSON Schema (3)
 
-*This repository is maintained as part of the [API Evangelist](https://apievangelist.com) APIs.json catalog.*
+The data models the API reads and writes.
+
+- [Filebase Pin](https://apis.io/schemas/filebase/filebase-pin/)
+- [Filebase Pin Status](https://apis.io/schemas/filebase/filebase-pin-status/)
+- [Filebase Usage Metrics](https://apis.io/schemas/filebase/filebase-usage/)
+
+#### JSON-LD (1)
+
+Linked-data contexts for the provider's vocabulary.
+
+- [Filebase Context](https://apis.io/jsonld/filebase/filebase-context/)
+
+#### Vocabulary (1)
+
+The provider's domain terms, defined.
+
+- [Filebase Vocabulary](https://apis.io/vocabularies/filebase/filebase-vocabulary/)
+
+#### Examples (4)
+
+Example requests and responses.
+
+- [Filebase Add Ipfs Response Example](https://apis.io/examples/filebase/filebase-add-ipfs-response-example/)
+- [Filebase Pin Example](https://apis.io/examples/filebase/filebase-pin-example/)
+- [Filebase Pin Status Example](https://apis.io/examples/filebase/filebase-pin-status-example/)
+- [Filebase Usage Example](https://apis.io/examples/filebase/filebase-usage-example/)
+
+#### Collections (11)
+
+Postman and Open Collection request collections.
+
+- [Filebase IPFS Pinning Service Buckets API](https://apis.io/collections/filebase/open-filebase-buckets-api/)
+- [Filebase IPFS Pinning Service Buckets Data Management API](https://apis.io/collections/filebase/open-filebase-data-management-api/)
+- [Filebase IPFS Pinning Service Buckets IPNS API](https://apis.io/collections/filebase/open-filebase-ipns-api/)
+- [Filebase IPFS Pinning Service Buckets Keypairs API](https://apis.io/collections/filebase/open-filebase-keypairs-api/)
+- [Filebase IPFS Pinning Service Buckets MFS API](https://apis.io/collections/filebase/open-filebase-mfs-api/)
+- [Filebase IPFS Pinning Service Buckets Multipart Upload API](https://apis.io/collections/filebase/open-filebase-multipart-upload-api/)
+- [Filebase IPFS Pinning Service Buckets Node API](https://apis.io/collections/filebase/open-filebase-node-api/)
+- [Filebase IPFS Pinning Service Buckets Objects API](https://apis.io/collections/filebase/open-filebase-objects-api/)
+- [Filebase IPFS Service Buckets Pinning API](https://apis.io/collections/filebase/open-filebase-pinning-api/)
+- [Filebase IPFS Pinning Service Buckets Pins API](https://apis.io/collections/filebase/open-filebase-pins-api/)
+- [Filebase IPFS Pinning Service Buckets Usage API](https://apis.io/collections/filebase/open-filebase-usage-api/)
+
+#### Governance rules (1)
+
+Spectral rulesets for the provider's contracts.
+
+- [Filebase — jsonschema rules](https://apis.io/rules/filebase/filebase-jsonschema-spectral-rules/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Filebase Authentication](https://apis.io/security/filebase/filebase-authentication/)
+- [Filebase Domain Security](https://apis.io/security/filebase/filebase-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Filebase Plans Pricing](https://apis.io/plans/filebase/filebase-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Filebase Rate Limits](https://apis.io/rate-limits/filebase/filebase-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Filebase Finops](https://apis.io/finops/filebase/filebase-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://filebase.com/)
+- [Documentation](https://filebase.com/docs/)
+- [Pricing](https://filebase.com/pricing/)
+- [Blog](https://filebase.com/blog/)
+- [Status](https://status.filebase.com/)
+
+## API Evangelist rating
+
+**Kin Score 32.7** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 71.4 |
+| Contract quality | 58.7 |
+| Contract governance | 9.8 |
+| Operational transparency | 13.2 |
+| Developer ergonomics | 23.8 |
+| Access clarity | 18.4 |
+
+**Agent readiness 17.9** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 16.7** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/filebase/](https://apis.io/providers/filebase/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Filebase: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/filebase/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
